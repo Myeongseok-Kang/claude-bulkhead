@@ -452,7 +452,7 @@ Windows、Linux 和 macOS，需要 Node 18 或更高版本。orphan-reaper 在 m
 
 ## 参与贡献
 
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 报告。变更记录见 [CHANGELOG.md](CHANGELOG.md)。
+见 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 报告。变更记录见 [CHANGELOG.md](CHANGELOG.md)，存储和发送的数据见 [PRIVACY.md](PRIVACY.md)。
 
 ## 许可证
 

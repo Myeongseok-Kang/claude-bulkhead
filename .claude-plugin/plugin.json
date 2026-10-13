@@ -7,6 +7,11 @@
     "url": "https://github.com/Myeongseok-Kang"
   },
   "repository": "https://github.com/Myeongseok-Kang/claude-bulkhead",
+  "homepage": "https://github.com/Myeongseok-Kang/claude-bulkhead#readme",
+  "documentationUrl": "https://github.com/Myeongseok-Kang/claude-bulkhead/tree/main/docs",
+  "supportUrl": "https://github.com/Myeongseok-Kang/claude-bulkhead/issues",
+  "privacyPolicyUrl": "https://github.com/Myeongseok-Kang/claude-bulkhead/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/Myeongseok-Kang/claude-bulkhead/blob/main/LICENSE",
   "license": "MIT",
   "keywords": ["hooks", "processes", "ports", "memory", "subagents", "worktrees", "windows", "linux", "macos"]
 }

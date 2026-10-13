@@ -452,7 +452,7 @@ Windows, Linux, macOS 이고 Node 18 이상이 필요합니다. orphan-reaper �
 
 ## 기여
 
-[CONTRIBUTING.md](CONTRIBUTING.md) 를 보세요. 보안 문제는 [SECURITY.md](SECURITY.md) 로 알려 주세요. 변경 기록은 [CHANGELOG.md](CHANGELOG.md) 에 있습니다.
+[CONTRIBUTING.md](CONTRIBUTING.md) 를 보세요. 보안 문제는 [SECURITY.md](SECURITY.md) 로 알려 주세요. 변경 기록은 [CHANGELOG.md](CHANGELOG.md) 에, 저장하고 보내는 정보는 [PRIVACY.md](PRIVACY.md) 에 있습니다.
 
 ## 라이선스
 

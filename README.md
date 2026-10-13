@@ -452,7 +452,7 @@ It renders as [![Guarded by bulkhead](https://img.shields.io/badge/guarded_by-bu
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md). The changelog is in [CHANGELOG.md](CHANGELOG.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md). The changelog is in [CHANGELOG.md](CHANGELOG.md), and what bulkhead stores and sends is in [PRIVACY.md](PRIVACY.md).
 
 ## License
 

@@ -5,6 +5,7 @@
 - `/bulkhead:remote` printed nothing when no remote was configured, and `/bulkhead:doctor` printed nothing when a check failed: Claude Code drops a slash command whose shell step exits non-zero. Both now show the output.
 - Each slash command pre-approves only the one `bulkhead` command it runs instead of any `node` command.
 - The repository no longer ships `package-lock.json`. Claude Code installs a plugin's packages when it finds a lockfile in the plugin root, so the lint tools could be installed with the plugin. The runtime still has no dependencies.
+- `PRIVACY.md` lists what bulkhead reads, stores and sends, and `plugin.json` carries the listing links.
 
 ## 0.1.0 - 2026-10-13
 
