@@ -1,11 +1,11 @@
 ---
 description: Show the Claude Code sessions on this machine, their ports and memory, heavy jobs and free RAM
-allowed-tools: Bash(node:*)
+allowed-tools: Bash(node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" status)
 ---
 
 Output of `bulkhead status`:
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" status`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" status 2>&1 || true`
 
 Summarize this for the user in a few lines:
 

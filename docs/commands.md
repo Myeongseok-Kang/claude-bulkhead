@@ -184,7 +184,7 @@ Runs every check and prints one line each, `OK`, `WARN` or `FAIL`. The exit code
 ```
 $ bulkhead doctor
 OK    node            v24.11.0
-OK    plugin          ~/.claude/plugins/cache/bulkhead/bulkhead/0.1.0, hooks: 2 SessionStart, 1 SessionEnd, 6 PreToolUse
+OK    plugin          ~/.claude/plugins/cache/bulkhead/bulkhead/0.1.1, hooks: 2 SessionStart, 1 SessionEnd, 6 PreToolUse
 OK    state dir       ~/.claude/bulkhead is writable
 OK    config          no config files, defaults in use
 OK    kill-guard      on

@@ -1,11 +1,11 @@
 ---
 description: List the processes that Claude Code sessions which have exited left running, and why orphan-reaper would stop them
-allowed-tools: Bash(node:*)
+allowed-tools: Bash(node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" reap --dry-run)
 ---
 
 Dry run of `bulkhead reap`, which stops nothing:
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" reap --dry-run`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" reap --dry-run 2>&1 || true`
 
 Summarize for the user:
 

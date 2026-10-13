@@ -1,16 +1,16 @@
 ---
 description: Summarize what the bulkhead guards blocked, optionally for a period such as 24h or 7d
 argument-hint: "[24h|7d|30d]"
-allowed-tools: Bash(node:*)
+allowed-tools: Bash(node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" log:*)
 ---
 
 Blocks recorded by bulkhead, for the period `$ARGUMENTS` (all time when empty):
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" log --summary --since="$ARGUMENTS"`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" log --summary --since="$ARGUMENTS" 2>&1 || true`
 
 Latest events:
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" log -n 10 --since="$ARGUMENTS"`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" log -n 10 --since="$ARGUMENTS" 2>&1 || true`
 
 Summarize for the user:
 

@@ -28,8 +28,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
+      # No lockfile on purpose: Claude Code installs a plugin's packages when it finds one,
+      # and these are only the lint tools. package.json pins them to exact versions.
+      - run: npm install --no-audit --no-fund
       - run: npm run lint
 
   coverage:

@@ -1,12 +1,12 @@
 ---
 description: Run a heavy command (tests, a build, a browser run) on the configured remote machine instead of this one
 argument-hint: "<command>, or empty for the remote status"
-allowed-tools: Bash(node:*)
+allowed-tools: Bash(node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" remote status)
 ---
 
 The remotes bulkhead knows about and what runs on them now:
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" remote status`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" remote status 2>&1 || true`
 
 The user's request: `$ARGUMENTS`
 

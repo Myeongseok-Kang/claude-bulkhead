@@ -1,11 +1,11 @@
 ---
 description: Check the bulkhead install, settings and this machine's limits
-allowed-tools: Bash(node:*)
+allowed-tools: Bash(node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" doctor)
 ---
 
 Output of `bulkhead doctor`:
 
-!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" doctor`
+!`node "${CLAUDE_PLUGIN_ROOT}/bin/bulkhead" doctor 2>&1 || true`
 
 Report to the user:
 
