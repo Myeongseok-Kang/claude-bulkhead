@@ -1,0 +1,559 @@
+# Commands a guard must block. Format: <guard>[,option=value...] TAB <command>
+# Options: timeout=<ms> (tool timeout, default 120000), platform=win32|posix (run only there).
+# Each guard runs in the machine state it needs:
+#   kill-guard, wait-guard  no other session, plenty of RAM
+#   memory-guard            RAM nearly gone
+#   port-guard              another Claude session holds every default dev port
+#   checkout-guard          another live session works in the same repository, which has uncommitted changes
+#   basics                  repository on main with a modified tracked file and an untracked file
+# The option state=<name> runs one line in another state (see stateFor in harness.js).
+# `#@ tool PowerShell` sends the lines below as PowerShell tool calls; `#@ config {json}` gives
+# them a global config.json, until `#@ config none`.
+# `<NL>` stands for a newline. A trailing TAB + `# todo: reason` marks a known miss in src/.
+
+# == kill-guard: pkill and killall by name ==
+kill-guard	pkill node
+kill-guard	pkill -f node
+kill-guard	pkill -9 node
+kill-guard	pkill -9 -f "next dev"
+kill-guard	pkill -f "next dev"
+kill-guard	pkill -f 'vite'
+kill-guard	pkill -f vite
+kill-guard	pkill -KILL node
+kill-guard	pkill --signal 9 node
+kill-guard	pkill -SIGTERM python
+kill-guard	pkill python3
+kill-guard	pkill -f python
+kill-guard	pkill chrome
+kill-guard	pkill -f chromium
+kill-guard	pkill -x node
+kill-guard	pkill -fi NODE
+kill-guard	pkill -f "npm run dev"
+kill-guard	pkill -f 'node server'
+kill-guard	pkill java
+kill-guard	pkill -f gradle
+kill-guard	pkill -f esbuild
+kill-guard	pkill -f vitest
+kill-guard	pkill -f jest
+kill-guard	pkill -f webpack
+kill-guard	pkill dotnet
+kill-guard	pkill ruby
+kill-guard	pkill -f ts-node
+kill-guard	pkill -f tsx
+kill-guard	pkill -f deno
+kill-guard	pkill -f claude
+kill-guard	pkill ssh
+kill-guard	/usr/bin/pkill node
+kill-guard	sudo pkill -f node
+kill-guard	sudo pkill node
+kill-guard	exec pkill node
+kill-guard	killall node
+kill-guard	killall -9 node
+kill-guard	killall -9 python3
+kill-guard	killall -q node
+kill-guard	killall chrome
+kill-guard	killall -KILL java
+kill-guard	killall node npm
+kill-guard	sudo killall -9 node
+kill-guard	killall -s KILL node
+kill-guard	killall firefox
+kill-guard	killall code
+kill-guard	pkill -u $USER node
+kill-guard	"pkill" node
+kill-guard	pkill -f node.exe
+
+# == kill-guard: taskkill, Stop-Process, wmic ==
+kill-guard	taskkill /F /IM node.exe
+kill-guard	taskkill //F //IM node.exe
+kill-guard	taskkill /IM node.exe
+kill-guard	taskkill /im node.exe /f
+kill-guard	taskkill -F -IM node.exe
+kill-guard	taskkill /F /T /IM node.exe
+kill-guard	taskkill /F /IM python.exe
+kill-guard	taskkill /F /IM chrome.exe
+kill-guard	taskkill /F /IM java.exe
+kill-guard	taskkill /F /IM msedge.exe /T
+kill-guard	taskkill /F /IM code.exe
+kill-guard	taskkill /F /IM "node.exe"
+kill-guard	taskkill /F /IM 'node.exe'
+kill-guard	taskkill.exe /F /IM node.exe
+kill-guard	TASKKILL /F /IM NODE.EXE
+kill-guard	taskkill /F /IM node.exe 2>nul
+kill-guard	taskkill /F /IM node.exe >/dev/null 2>&1 || true
+kill-guard	taskkill /f /im node.exe & taskkill /f /im python.exe
+kill-guard	taskkill /F /FI "IMAGENAME eq node.exe"
+kill-guard	taskkill /FI "IMAGENAME eq chrome.exe" /F
+kill-guard	taskkill /F /FI "WINDOWTITLE eq npm*"
+kill-guard	MSYS_NO_PATHCONV=1 taskkill /F /IM node.exe
+kill-guard	taskkill /F /IM node*
+kill-guard	wmic process where name="node.exe" delete
+kill-guard	wmic process where "name='node.exe'" call terminate
+kill-guard	wmic process where name='python.exe' delete
+#@ tool PowerShell
+kill-guard	Stop-Process -Name node
+kill-guard	Stop-Process -Name node -Force
+kill-guard	Stop-Process -ProcessName node
+kill-guard	spps -Name node
+kill-guard	Stop-Process -Name "node" -Force
+kill-guard	Stop-Process -Name chrome -ErrorAction SilentlyContinue
+kill-guard	kill -Name node
+kill-guard	Get-Process node | Stop-Process
+kill-guard	Get-Process node | Stop-Process -Force
+kill-guard	Get-Process -Name node | Stop-Process -Force
+kill-guard	gps node | spps
+kill-guard	Get-Process chrome | Stop-Process -Force
+kill-guard	Get-Process python | kill
+kill-guard	ps node | kill
+kill-guard	Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force
+kill-guard	Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Invoke-CimMethod -MethodName Terminate
+kill-guard	Get-WmiObject Win32_Process -Filter "Name='node.exe'" | ForEach-Object { $_.Terminate() }
+kill-guard	Get-CimInstance Win32_Process | ? { $_.Name -eq 'node.exe' } | % { Stop-Process -Id $_.ProcessId }
+kill-guard	Start-Process taskkill -ArgumentList '/F /IM node.exe'
+kill-guard	Stop-Process -Name node,python -Force
+kill-guard	Get-Process node* | Stop-Process
+kill-guard	(Get-Process node).Kill()
+kill-guard	Get-Process | Where-Object { $_.Name -eq 'node' } | Stop-Process
+kill-guard	Get-Process | Where-Object ProcessName -eq node | Stop-Process -Force
+#@ tool Bash
+
+# == kill-guard: pgrep, ps and xargs pipelines ==
+kill-guard	kill $(pgrep node)
+kill-guard	kill -9 $(pgrep node)
+kill-guard	kill $(pgrep -f vite)
+kill-guard	kill -9 `pgrep node`
+kill-guard	pgrep node | xargs kill
+kill-guard	pgrep -f next | xargs kill -9
+kill-guard	pgrep python | xargs -r kill
+kill-guard	ps aux | grep node | awk '{print $2}' | xargs kill
+kill-guard	ps -ef | grep python | awk '{print $2}' | xargs kill -9
+kill-guard	ps aux | grep -i chrome | awk '{print $2}' | xargs kill
+kill-guard	ps aux | grep node | grep -v grep | awk '{print $2}' | xargs kill -9
+kill-guard	kill -9 $(ps aux | grep node | awk '{print $2}')
+kill-guard	ps aux | grep [n]ode | awk '{print $2}' | xargs kill
+kill-guard	for pid in $(pgrep node); do kill $pid; done
+
+# == kill-guard: chained and wrapped ==
+kill-guard	npm run build && pkill node
+kill-guard	npm run build; pkill node
+kill-guard	npm test || pkill -f vitest
+kill-guard	cd app; killall node
+kill-guard	true && pkill node
+kill-guard	pkill -f node; npm run dev
+kill-guard	ls | pkill node
+kill-guard	echo stopping && pkill -f node
+kill-guard	cd web && taskkill /F /IM node.exe /T
+kill-guard	bash -c "pkill node"
+kill-guard	bash -c 'pkill -f node'
+kill-guard	bash -c "pkill -f \"next dev\""
+kill-guard	sh -c "pkill node"
+kill-guard	sh -c "killall -9 node"
+kill-guard	zsh -c 'pkill node'
+kill-guard	powershell -Command "Stop-Process -Name node -Force"
+kill-guard	powershell -NoProfile -Command "Get-Process node | Stop-Process -Force"
+kill-guard	powershell.exe -c "taskkill /F /IM node.exe"
+kill-guard	pwsh -c "Stop-Process -Name chrome"
+kill-guard	cmd /c "taskkill /F /IM node.exe"
+kill-guard	cmd /c taskkill /F /IM node.exe
+kill-guard	cmd //c "taskkill /F /IM node.exe"
+kill-guard	cmd.exe /c "taskkill /IM node.exe /F"
+kill-guard	timeout 5 pkill node
+kill-guard	nohup pkill node
+kill-guard	npm run dev &<NL>sleep 5<NL>pkill node
+kill-guard	cat > a.txt <<'EOF'<NL>hello<NL>EOF<NL>pkill node
+
+# == wait-guard: long foreground waits (tool timeout 600000) ==
+wait-guard,timeout=600000	sleep 300
+wait-guard,timeout=600000	sleep 181
+wait-guard,timeout=600000	sleep 200 && ls
+wait-guard,timeout=600000	npm run build && sleep 240
+wait-guard,timeout=600000	sleep 5m
+wait-guard,timeout=600000	sleep 4m && tail log
+wait-guard,timeout=600000	sleep 1h
+wait-guard,timeout=600000	sleep 100; sleep 100
+wait-guard,timeout=600000	until [ -f done ]; do sleep 10; done
+wait-guard,timeout=600000	while ! curl -sf localhost:3000; do sleep 5; done
+wait-guard,timeout=600000	while true; do sleep 60; done
+wait-guard,timeout=600000	for i in $(seq 1 60); do sleep 10; done
+wait-guard,timeout=600000	for i in {1..100}; do sleep 5; done
+wait-guard,timeout=600000	for i in $(seq 1 30); do grep -q DONE out.log && break; sleep 20; done
+wait-guard,timeout=600000	until grep -q ready dev.log; do sleep 2; done; tail dev.log
+wait-guard,timeout=600000	timeout 600 bash -c 'until [ -f x ]; do sleep 5; done'
+wait-guard,timeout=600000	cd build && until [ -f DONE ]; do sleep 15; done
+wait-guard,timeout=300000	until curl -s localhost:3000 >/dev/null; do sleep 1; done
+wait-guard,timeout=600000	ssh build-host bash -s <<'EOF'<NL>until [ -f a ]; do sleep 30; done<NL>EOF
+wait-guard,timeout=600000	bash -c "sleep 300"
+wait-guard,timeout=600000	sh -c 'sleep 400'
+wait-guard,timeout=600000	python -c "import time; time.sleep(300)"
+wait-guard,timeout=600000	timeout /t 300 /nobreak
+#@ tool PowerShell
+wait-guard,timeout=600000	Start-Sleep -Seconds 300
+wait-guard,timeout=600000	Start-Sleep 400
+wait-guard,timeout=600000	Start-Sleep -s 300
+wait-guard,timeout=600000	Start-Sleep -Milliseconds 300000
+wait-guard,timeout=600000	while ($true) { Start-Sleep 30 }
+wait-guard,timeout=600000	while (-not (Test-Path done.flag)) { Start-Sleep -Seconds 20 }
+wait-guard,timeout=600000	do { Start-Sleep 10 } while (-not (Test-Path x))
+wait-guard,timeout=600000	1..100 | ForEach-Object { Start-Sleep 5 }
+wait-guard,timeout=600000	1..30 | % { Start-Sleep 20; Get-Content a.log -Tail 2 }
+#@ tool Bash
+
+# == memory-guard: heavy commands while RAM is low ==
+memory-guard	npx vitest run
+memory-guard	npx vitest run --maxWorkers=4
+memory-guard	npm test
+memory-guard	npm run build
+memory-guard	npm run e2e
+memory-guard	pnpm build
+memory-guard	pnpm test
+memory-guard	yarn test
+memory-guard	yarn build
+memory-guard	bun run build
+memory-guard	bun test
+memory-guard	./gradlew assembleDebug
+memory-guard	gradlew.bat build
+memory-guard	emulator -avd Pixel_7 -no-window
+memory-guard	dotnet build
+memory-guard	dotnet test
+memory-guard	dotnet publish -c Release
+memory-guard	npx next build
+memory-guard	npx next dev
+memory-guard	npx vite build
+memory-guard	npx tsc --noEmit
+memory-guard	tsc -b
+memory-guard	npx webpack --mode production
+memory-guard	ffmpeg -i in.mp4 out.webm
+memory-guard	cargo build --release
+memory-guard	cargo test
+memory-guard	go test ./...
+memory-guard	pytest -n 8
+memory-guard	python -m pytest -n auto
+memory-guard	docker build -t app .
+memory-guard	docker compose up -d
+memory-guard	npx playwright test
+memory-guard	npx jest --ci
+memory-guard	npx cypress run
+memory-guard	cd web && npm run build
+memory-guard	npm ci && npm test
+memory-guard	node -e "require('playwright').chromium.launch()"
+memory-guard	bash -c "npm test"
+memory-guard	sh -c 'npx vitest run'
+memory-guard	mvn clean install
+memory-guard	./mvnw verify
+memory-guard	gradle build
+memory-guard,state=quiet	rm ~/.claude/bulkhead/slots/slot-1.json
+memory-guard,state=quiet	touch ~/.claude/bulkhead/slots/slot-3.json
+memory-guard,state=quiet	echo {} > ~/.claude/bulkhead/slots/slot-2.json
+memory-guard,state=quiet	Remove-Item ~/.claude/bulkhead/slots/slot-1.json
+memory-guard,state=quiet	node -e "fs.utimesSync('slot-1.json', new Date(), new Date())"
+
+# == port-guard: another session holds the port ==
+port-guard	npx next dev
+port-guard	next dev
+port-guard	next dev -p 3001
+port-guard	npx next start
+port-guard	npm run dev
+port-guard	npm start
+port-guard	pnpm dev
+port-guard	yarn dev
+port-guard	bun run dev
+port-guard	npm run dev:vite
+port-guard	npm run preview
+port-guard	npm run storybook
+port-guard	npx vite
+port-guard	npx vite --port 5173
+port-guard	npx vite preview
+port-guard	npx astro dev
+port-guard	uvicorn app:app --reload
+port-guard	uvicorn main:app --port 8000
+port-guard	flask run
+port-guard	python -m http.server
+port-guard	python3 -m http.server 8080
+port-guard	python manage.py runserver
+port-guard	php artisan serve
+port-guard	rails s
+port-guard	bundle exec rails server
+port-guard	ng serve
+port-guard	npx webpack serve
+port-guard	hugo server
+port-guard	bundle exec jekyll serve
+port-guard	npx storybook dev -p 6006
+port-guard	npx wrangler dev
+port-guard	npx http-server -p 8080
+port-guard	npx expo start
+port-guard	npx nuxi dev
+port-guard	PORT=3000 npm run dev
+port-guard	cd . && npx next dev
+port-guard	npm run dev &
+port-guard	nohup npx next dev > dev.log 2>&1 &
+port-guard	npm run dev -- -p 3001
+
+# == checkout-guard: another session shares the tree ==
+checkout-guard	git checkout main
+checkout-guard	git checkout -b feature/x
+checkout-guard	git checkout -
+checkout-guard	git checkout .
+checkout-guard	git checkout -- .
+checkout-guard	git checkout HEAD~1
+checkout-guard	git checkout v1.0.0
+checkout-guard	git switch other
+checkout-guard	git switch -c fix
+checkout-guard	git switch --detach HEAD~1
+checkout-guard	git stash
+checkout-guard	git stash -u
+checkout-guard	git stash pop
+checkout-guard	git stash apply
+checkout-guard	git stash push -u -m wip
+checkout-guard	git reset --hard
+checkout-guard	git reset --hard HEAD~1
+checkout-guard	git clean -fd
+checkout-guard	git rebase main
+checkout-guard	git rebase -i HEAD~3
+checkout-guard	git rebase --onto main a b
+checkout-guard	git merge feature
+checkout-guard	git merge --no-ff feature
+checkout-guard	git pull
+checkout-guard	git pull --rebase
+checkout-guard	git restore .
+checkout-guard	git restore --worktree .
+checkout-guard	git restore --source=HEAD~1 .
+checkout-guard	git -C . switch main
+checkout-guard	cd . && git checkout main
+checkout-guard	git fetch && git checkout main
+checkout-guard	git -c core.autocrlf=false checkout main
+checkout-guard	npm test; git stash
+checkout-guard	bash -c "git checkout main"
+checkout-guard	GIT_TRACE=1 git checkout main
+
+# == basics: deleting roots and home ==
+basics	rm -rf /
+basics	rm -rf /*
+basics	sudo rm -rf /
+basics	rm -rf ~
+basics	rm -rf ~/
+basics	rm -rf ~/*
+basics	rm -rf $HOME
+basics	rm -rf "$HOME"
+basics	rm -rf ${HOME}
+basics	rm -fr ~
+basics	rm -Rf /
+basics	rm -r -f /
+basics	rm --recursive --force /
+basics	rm -rf -- /
+basics	rm -rf ..
+basics	rm -rf ../..
+basics	rm -rf ../*
+basics	cd src && rm -rf /
+basics	command rm -rf ~
+basics	Remove-Item -Recurse -Force ~
+basics	Remove-Item -Recurse -Force $HOME
+basics,platform=win32	Remove-Item -Recurse -Force C:\
+basics,platform=win32	rd /s /q C:\
+basics,platform=win32	rmdir /s /q C:\
+basics,platform=win32	rm -rf /c/
+basics,platform=win32	Remove-Item -Recurse -Force $env:USERPROFILE
+basics	bash -c "rm -rf /"
+
+# == basics: force-pushing main ==
+basics	git push --force origin main
+basics	git push -f origin main
+basics	git push origin +main
+basics	git push --force
+basics	git push -f
+basics	git push origin main --force
+basics	git push -f origin HEAD
+basics	git push --force origin master
+basics	git push -f origin feature:main
+basics	git push -f origin refs/heads/main
+basics	git -C . push -f origin main
+
+# == basics: throwing away uncommitted work ==
+basics	git reset --hard
+basics	git reset --hard HEAD
+basics	git reset --hard origin/main
+basics	git reset --hard HEAD~1
+basics	git clean -fdx
+basics	git clean -fd
+basics	git clean -xdf
+basics	git clean -f -d
+basics	git add -A; git reset --hard
+
+# == kill-guard: valued options, quoting and name lists ==
+kill-guard	pkill -s KILL node
+kill-guard	pkill --signal KILL -f vite
+kill-guard	pkill -u "$(whoami)" -f "next dev"
+kill-guard	pkill -n node
+kill-guard	pkill -o -f webpack
+kill-guard	pkill --newest -f vitest
+kill-guard	'pkill' -f python
+kill-guard	\pkill node
+kill-guard	/usr/bin/pkill -f node
+kill-guard	killall -9 -u $USER node
+kill-guard	killall --signal TERM python3
+kill-guard	killall -r '^node'
+kill-guard	killall node python
+kill-guard	pkill -f 'node|python'
+kill-guard	pkill -f "vite|esbuild"
+kill-guard	pidof node | xargs kill
+kill-guard	kill $(pidof node)
+kill-guard	kill -9 `pgrep -f vite`
+kill-guard	kill $(ps aux | grep node | awk '{print $2}')
+kill-guard	ps aux | grep [n]ode | awk '{print $2}' | xargs kill -9
+kill-guard	ps -ef | egrep 'node|vite' | awk '{print $2}' | xargs -r kill
+kill-guard	ps -C node -o pid= | xargs kill
+kill-guard	for p in $(pgrep -f vite); do kill -9 "$p"; done
+kill-guard	pgrep node | while read p; do kill "$p"; done
+kill-guard	PIDS=$(pgrep -f next); kill $PIDS
+kill-guard	pgrep -f vitest | xargs -I{} kill -9 {}
+kill-guard	pgrep -d' ' node | xargs kill
+
+# == kill-guard: wrappers ==
+kill-guard	bash -lc 'pkill -f vite'
+kill-guard	sh -c 'killall node'
+kill-guard	zsh -c "pkill -f python"
+kill-guard	sudo -u dev pkill -f vite
+kill-guard	time pkill -f webpack
+kill-guard	nice -n 5 pkill node
+kill-guard	env FOO=1 pkill node
+kill-guard	DEBUG=1 pkill -f next
+kill-guard	eval "pkill node"
+kill-guard	eval 'killall python'
+kill-guard	trap 'pkill node' EXIT
+kill-guard	watch -n 5 pkill -f vite
+kill-guard	su -c "pkill node" dev
+kill-guard	timeout 10 pkill node
+kill-guard	bash -c "bash -c 'pkill node'"
+kill-guard	cmd /d /s /c "taskkill /F /IM node.exe"
+kill-guard	cmd.exe /c "taskkill /IM python.exe /F"
+kill-guard	powershell.exe -NoProfile -c "Get-Process node | Stop-Process"
+kill-guard	pwsh -c "Stop-Process -Name python"
+kill-guard	pwsh -NoLogo -NoProfile -Command "(Get-Process node).Kill()"
+kill-guard	powershell -EncodedCommand UwB0AG8AcAAtAFAAcgBvAGMAZQBzAHMAIAAtAE4AYQBtAGUAIABuAG8AZABlACAALQBGAG8AcgBjAGUA
+
+# == kill-guard: Windows name lists, wildcards and filters ==
+kill-guard	taskkill /F /IM node.exe /IM python.exe
+kill-guard	taskkill /IM "node.exe" /T /F
+kill-guard	taskkill -f -im node.exe
+kill-guard	wmic process where "name like 'node%'" delete
+kill-guard	wmic process where name="python.exe" call terminate
+kill-guard	for /f "tokens=2" %a in ('tasklist ^| findstr node') do taskkill /F /PID %a
+#@ tool PowerShell
+kill-guard	Stop-Process -Name node,python
+kill-guard	Stop-Process -Name node* -Force
+kill-guard	Stop-Process -Name:node
+kill-guard	Stop-Process -ProcessName python -Force
+kill-guard	spps -n node
+kill-guard	Get-Process -Name node, python | Stop-Process -Force
+kill-guard	(Get-Process -Name python).Kill($true)
+kill-guard	Get-Process node | ForEach-Object { $_.Kill() }
+kill-guard	Get-Process node | % Kill
+kill-guard	foreach ($p in Get-Process node) { $p.Kill() }
+kill-guard	$procs = Get-Process node; $procs | Stop-Process
+kill-guard	Get-Process | Where-Object { $_.ProcessName -like 'node*' } | Stop-Process -Force
+kill-guard	Get-Process | Where-Object Name -match 'node|python' | Stop-Process
+kill-guard	Get-Process | ? { $_.Name -in 'node','python' } | Stop-Process
+kill-guard	Get-Process | Where-Object { $_.StartTime -lt (Get-Date).AddHours(-1) -and $_.Name -eq 'node' } | Stop-Process
+kill-guard	Get-CimInstance Win32_Process -Filter "Name like 'python%'" | Remove-CimInstance
+kill-guard	Get-WmiObject Win32_Process -Filter "Name='node.exe'" | Remove-WmiObject
+kill-guard	Start-Process taskkill -ArgumentList '/F','/IM','node.exe'
+kill-guard	Start-Process -FilePath taskkill.exe -ArgumentList "/F /IM node.exe" -NoNewWindow -Wait
+#@ tool Bash
+
+# == wait-guard: wrapped and indirect waits ==
+wait-guard,timeout=600000	sh -c 'sleep 600 && echo done'
+wait-guard,timeout=600000	sudo sleep 400
+wait-guard,timeout=600000	nice sleep 300
+wait-guard,timeout=600000	env X=1 sleep 300
+wait-guard,timeout=600000	time sleep 300
+wait-guard,timeout=600000	eval "sleep 300"
+wait-guard,timeout=600000	ssh build-host "sleep 300"
+wait-guard,timeout=600000	bulkhead remote run -- "npm test; sleep 600"
+wait-guard,timeout=600000	docker exec web sleep 600
+wait-guard,timeout=600000	kubectl exec api-0 -- sleep 300
+wait-guard,timeout=600000	sleep 1d
+wait-guard,timeout=600000	sleep infinity
+wait-guard,timeout=600000	python3 -c 'import time; time.sleep(600)'
+wait-guard,timeout=600000	node -e "setTimeout(() => {}, 300000)"
+wait-guard,timeout=600000	node -e "await new Promise(r => setTimeout(r, 400000))"
+wait-guard,timeout=600000	deno eval "await new Promise(r => setTimeout(r, 300000))"
+wait-guard,timeout=600000	ruby -e "sleep 300"
+wait-guard,timeout=600000	perl -e "sleep 300"
+wait-guard,timeout=600000	python3 - <<'EOF'<NL>import time<NL>time.sleep(300)<NL>EOF
+wait-guard,timeout=600000	timeout /t -1
+wait-guard,timeout=600000	ping -n 301 127.0.0.1 > nul
+wait-guard,timeout=600000,platform=win32	ping -t localhost
+wait-guard,timeout=600000,platform=posix	ping localhost
+wait-guard,timeout=600000	ping -c 400 -i 1 localhost
+wait-guard,timeout=600000	tail -f server.log
+wait-guard,timeout=600000	tail -F logs/app.log
+wait-guard,timeout=600000	tail --follow=name app.log
+wait-guard,timeout=600000	docker logs -f web
+wait-guard,timeout=600000	docker compose logs -f api
+wait-guard,timeout=600000	kubectl logs -f api-0
+wait-guard,timeout=600000	journalctl -fu app
+wait-guard,timeout=600000	while true; do curl -s localhost:3000; sleep 5; done
+wait-guard,timeout=600000	until [ -f done.flag ]; do sleep 10; done
+#@ tool PowerShell
+wait-guard,timeout=600000	Start-Sleep -s 600
+wait-guard,timeout=600000	Start-Sleep -Milliseconds 400000
+wait-guard,timeout=600000	[Threading.Thread]::Sleep(300000)
+wait-guard,timeout=600000	Get-Content server.log -Wait
+wait-guard,timeout=600000	gc .\app.log -Tail 20 -Wait
+wait-guard,timeout=600000	while ($true) { Start-Sleep 5 }
+#@ tool Bash
+
+# == memory-guard: more build tools and wrappers ==
+memory-guard	mvn verify
+memory-guard	mvn package -DskipTests
+memory-guard	./mvnw test
+memory-guard	./gradlew test
+memory-guard	docker compose up --build
+memory-guard	pytest -n auto
+memory-guard	npx tsc -b
+memory-guard	pnpm exec vitest run
+memory-guard	npm run test:e2e
+memory-guard	sudo docker build .
+memory-guard	CI=1 npx jest
+memory-guard	nice -n 10 npm run build
+memory-guard	env NODE_OPTIONS=--max-old-space-size=4096 npx next build
+memory-guard	cmd /c "npm run build"
+memory-guard	bazel test //...
+memory-guard	npx turbo build
+memory-guard	npx nx run-many -t test
+
+# == port-guard: kill by port and wrapped dev servers ==
+port-guard	npx kill-port 3000
+port-guard	fuser -k 3000/tcp
+port-guard	kill $(lsof -ti :5173)
+port-guard	lsof -ti:3000 | xargs kill -9
+port-guard	bash -c "npx next dev"
+port-guard	sudo npx vite
+port-guard	env PORT=3000 npm run dev
+port-guard	cmd /c "npm run dev"
+port-guard	powershell -Command "npm run dev"
+#@ tool PowerShell
+port-guard	Get-NetTCPConnection -LocalPort 3000 | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }
+port-guard	Stop-Process -Id (Get-NetTCPConnection -LocalPort 5173).OwningProcess
+port-guard	Start-Process npm -ArgumentList 'run','dev'
+#@ tool Bash
+
+# == checkout-guard: wrapped ==
+checkout-guard	GIT_TRACE=1 git switch main
+checkout-guard	env GIT_PAGER=cat git checkout -b fix/login
+checkout-guard	sh -c 'git stash && git checkout main'
+checkout-guard	cmd /c "git checkout main"
+
+# == basics: casings, wrappers, settings ==
+basics	rm -fR /
+basics	bash -c "rm -rf ~"
+basics	bash -c "git push --force origin main"
+basics	env GIT_TRACE=1 git push -f origin main
+basics	sh -c 'git reset --hard'
+
+# == settings that widen a guard ==
+#@ config {"killGuard":{"extraSharedNames":["postgres"]}}
+kill-guard	pkill postgres
+#@ config {"basics":{"protectedBranches":["release"]}}
+basics	git push -f origin release
+#@ config {"waitGuard":{"limitSeconds":60}}
+wait-guard,timeout=600000	sleep 90
+#@ config none

@@ -1,0 +1,1262 @@
+# Commands every guard must let through.
+# Each line runs through every PreToolUse hook with a realistic payload (timeout 120000),
+# cwd a clean temporary git repository on branch main, plenty of free RAM, and no other
+# Claude session on the machine. `<NL>` stands for a newline inside one command.
+# `#@ tool PowerShell` switches the tool name for the lines below it.
+# `#@ state <name>` runs the lines below in another machine state (low-ram, busy-ports,
+# shared-tree; see stateFor in harness.js) and `#@ state default` goes back to the quiet one.
+# `#@ config {json}` gives the lines below a global config.json, until `#@ config none`.
+# `#@ timeout 600000` sends a longer tool timeout with the lines below, `#@ timeout default` ends it.
+# A trailing TAB + `# todo: reason` marks a known false positive in src/ (reported as a todo test).
+
+# == npm ==
+# Installs, scripts and registry chores.
+npm install
+npm ci
+npm i -D typescript @types/node
+npm install --save-exact react@18.3.1 react-dom@18.3.1
+npm uninstall lodash
+npm update
+npm outdated
+npm ls --depth=0
+npm audit
+npm audit fix
+npm run lint
+npm run lint -- --fix
+npm run format
+npm run typecheck
+npm test
+npm test -- --watch=false
+npm run test -- src/app.test.ts
+npm run build
+npm run dev
+npm start
+npm run storybook
+npm pack --dry-run
+npm version patch --no-git-tag-version
+npm config get registry
+npm cache verify
+npm view next version
+npm exec -- prettier --check .
+npm init -y
+npm pkg get scripts
+npm explain react
+npm rebuild esbuild
+npm dedupe
+npm prune --production
+npm run build 2>&1 | tail -20
+npm test 2>&1 | grep -E "(pass|fail)"
+npx tsc --noEmit
+npx tsc -p tsconfig.build.json
+npx eslint . --ext .ts,.tsx
+npx prettier --write "src/**/*.{ts,tsx}"
+npx vitest run --maxWorkers=4
+npx vitest run src/utils
+npx jest --ci --runInBand
+npx jest path/to/file.test.js -t "renders"
+npx playwright test --project=chromium
+npx playwright install chromium
+npx create-next-app@latest web --ts --eslint
+npx kill-port 3000
+npx kill-port 3000 5173
+npx rimraf dist
+npx depcheck
+npx npm-check-updates
+npx next lint
+npx next build
+npx next dev -p 3001
+npx vite build
+npx vite --port 5174
+npx webpack --mode production
+npx esbuild src/index.ts --bundle --outfile=dist/out.js
+npx ts-node scripts/seed.ts
+npx tsx scripts/migrate.ts
+npx prisma generate
+npx prisma migrate dev --name init
+npx prisma studio
+npx drizzle-kit push
+npx wrangler deploy --dry-run
+npx serve -s dist
+npx http-server dist -p 8081
+npx concurrently "npm:dev" "npm:watch"
+npx nodemon server.js
+npx turbo run build --filter=web
+
+# == pnpm, yarn, bun ==
+# The other JavaScript package managers and their workspaces.
+pnpm install
+pnpm install --frozen-lockfile
+pnpm add zod
+pnpm add -D vitest
+pnpm remove moment
+pnpm dev
+pnpm build
+pnpm test
+pnpm -r build
+pnpm --filter web dev
+pnpm -C packages/api test
+pnpm dlx create-vite@latest app --template react-ts
+pnpm exec tsc --noEmit
+pnpm why react
+pnpm store prune
+yarn
+yarn install --immutable
+yarn add axios
+yarn remove axios
+yarn dev
+yarn build
+yarn test --coverage
+yarn workspace api start
+yarn workspaces foreach -A run build
+yarn dlx @biomejs/biome check .
+yarn upgrade-interactive
+bun install
+bun add hono
+bun run dev
+bun run build
+bun test
+bun test --watch
+bunx prettier --check .
+bun build ./index.ts --outdir ./out
+bun --version
+deno task dev
+deno run --allow-net server.ts
+deno test --allow-read
+deno fmt
+deno lint
+
+# == node ==
+# Running scripts and one-liners; process.kill on a known PID.
+node --version
+node index.js
+node server.js
+node --inspect server.js
+node --test
+node --test test/
+node --test --test-name-pattern="parser"
+node --experimental-test-coverage --test
+node scripts/build.mjs
+node -e "console.log(process.versions)"
+node -e "console.log(require('./package.json').version)"
+node -e "process.kill(Number(process.argv[1]), 'SIGTERM')" 4312
+node -e "setTimeout(() => process.exit(0), 2000)"
+node -p "os.cpus().length"
+node --max-old-space-size=4096 scripts/big.js
+node --env-file=.env server.js
+node --watch server.js
+node dist/cli.js --help
+NODE_ENV=production node server.js
+DEBUG=app:* node server.js
+node scripts/kill-stale-workers.js --dry-run
+corepack enable
+nvm use 20
+nvm install 22
+fnm use 18
+volta install node@22
+
+# == python ==
+# Interpreters, virtual environments, packaging and tests.
+python --version
+python3 --version
+python -m venv .venv
+source .venv/bin/activate
+.venv/bin/python -m pip install -r requirements.txt
+pip install -r requirements.txt
+pip install -e ".[dev]"
+pip install --upgrade pip
+pip freeze > requirements.lock
+pip list --outdated
+pip show requests
+pip uninstall -y requests
+python -m pip install httpx
+python main.py
+python3 scripts/seed_db.py --env dev
+python -c "import sys; print(sys.version)"
+python -c "import time; time.sleep(1); print('ok')"
+python -m http.server 8000 --directory dist
+python -m json.tool data.json
+python -m pytest -q
+python -m unittest discover -s tests
+python manage.py migrate
+python manage.py makemigrations
+python manage.py runserver 8001
+python manage.py shell -c "print(1)"
+python manage.py collectstatic --noinput
+python -m black .
+python -m ruff check . --fix
+python -m mypy src
+python -m build
+python -m twine check dist/*
+pytest
+pytest -x -q
+pytest tests/test_api.py::test_login -vv
+pytest -k "not slow" --maxfail=1
+pytest --cov=src --cov-report=term-missing
+pytest -n 4
+ruff check .
+ruff format .
+black --check .
+mypy .
+flake8 src
+isort .
+uv venv
+uv sync
+uv add fastapi
+uv pip install -r requirements.txt
+uv run pytest
+uv run python main.py
+uvx ruff check
+poetry install
+poetry add requests
+poetry run pytest
+poetry run python -m app
+poetry lock --no-update
+poetry shell
+pipenv install
+pipenv run python app.py
+conda activate ml
+conda env create -f environment.yml
+jupyter nbconvert --to script notebook.ipynb
+uvicorn app.main:app --reload --port 8010
+flask --app app run --port 5050
+gunicorn app:app -w 4 -b 127.0.0.1:8050
+celery -A proj worker -l info
+tox -e py311
+nox -s tests
+pre-commit run --all-files
+pyinstaller --onefile cli.py
+
+# == go ==
+go version
+go mod tidy
+go mod download
+go get github.com/stretchr/testify@latest
+go build ./...
+go build -o bin/server ./cmd/server
+go run ./cmd/server
+go run main.go
+go test ./...
+go test -run TestLogin ./internal/auth -v
+go test -race -count=1 ./...
+go test -bench=. -benchmem ./pkg/...
+go vet ./...
+go fmt ./...
+go generate ./...
+go install golang.org/x/tools/gopls@latest
+go env GOPATH
+go clean -testcache
+golangci-lint run
+gofmt -l .
+staticcheck ./...
+
+# == rust ==
+cargo --version
+cargo build
+cargo build --release
+cargo run
+cargo run --bin server -- --port 8090
+cargo test
+cargo test -- --nocapture
+cargo test parser::tests
+cargo check
+cargo clippy -- -D warnings
+cargo fmt --all
+cargo fmt -- --check
+cargo add serde --features derive
+cargo update
+cargo doc --no-deps
+cargo bench
+cargo clean
+cargo install cargo-watch
+cargo watch -x test
+rustup update
+rustup target add wasm32-unknown-unknown
+rustc --version
+
+# == java, kotlin ==
+# Gradle, Maven and the JDK tools.
+./gradlew build
+./gradlew test
+./gradlew assembleDebug
+./gradlew :app:testDebugUnitTest --tests "*LoginTest*"
+./gradlew clean
+./gradlew dependencies --configuration runtimeClasspath
+./gradlew --stop
+./gradlew bootRun
+./gradlew spotlessApply
+gradle build
+gradle --version
+mvn -v
+mvn clean install
+mvn test
+mvn -q -DskipTests package
+mvn dependency:tree
+mvn spring-boot:run
+./mvnw verify
+java -version
+java -jar target/app.jar
+java -jar build/libs/app-all.jar --server.port=8091
+javac -d out src/Main.java
+jar tf build/libs/app.jar
+kotlinc hello.kt -include-runtime -d hello.jar
+jps -l
+jstack 4312
+keytool -list -keystore debug.keystore -storepass android
+
+# == android ==
+adb devices
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb logcat -d | tail -100
+adb shell am force-stop com.example.app
+adb shell pm clear com.example.app
+adb kill-server
+adb start-server
+adb reverse tcp:8081 tcp:8081
+sdkmanager --list
+avdmanager list avd
+
+# == dotnet ==
+dotnet --info
+dotnet new console -o Hello
+dotnet restore
+dotnet build
+dotnet build -c Release
+dotnet test
+dotnet test --filter "FullyQualifiedName~Auth"
+dotnet run --project src/Api
+dotnet watch run
+dotnet publish -c Release -o out
+dotnet add package Newtonsoft.Json
+dotnet ef migrations add Init
+dotnet ef database update
+dotnet format
+dotnet tool restore
+dotnet nuget locals all --clear
+
+# == ruby ==
+ruby -v
+bundle install
+bundle exec rspec
+bundle exec rspec spec/models/user_spec.rb:12
+bundle exec rails db:migrate
+bundle exec rails s -p 3005
+bundle exec rubocop -a
+bundle update rails
+gem install bundler
+rails console
+rails generate model User name:string
+rake test
+irb -r ./lib/app.rb
+
+# == php ==
+php -v
+php artisan migrate
+php artisan serve --port=8095
+php artisan test
+php artisan tinker
+php -S localhost:8096 -t public
+composer install
+composer require guzzlehttp/guzzle
+composer update --lock
+composer dump-autoload
+vendor/bin/phpunit
+vendor/bin/phpstan analyse src
+
+# == docker ==
+# Containers: stopping and killing a named container is not a host-wide kill.
+docker ps
+docker ps -a
+docker images
+docker build -t app .
+docker build -t app:dev -f Dockerfile.dev .
+docker run --rm -p 8097:80 nginx
+docker run --rm -it alpine sh
+docker run -d --name redis -p 6379:6379 redis:7
+docker run --rm -v "$PWD":/app -w /app node:20 npm test
+docker exec -it web sh
+docker exec web ls /app
+docker logs -f --tail 100 web
+docker logs web 2>&1 | tail -50
+docker stop web
+docker kill web
+docker rm -f web
+docker restart web
+docker rmi app:old
+docker image prune -f
+docker system df
+docker volume ls
+docker network ls
+docker inspect web --format '{{.State.Status}}'
+docker cp web:/app/log.txt ./log.txt
+docker tag app registry.example.com/app:1.2.3
+docker push registry.example.com/app:1.2.3
+docker pull postgres:16
+docker compose up -d
+docker compose up --build
+docker compose down
+docker compose down -v
+docker compose ps
+docker compose logs -f api
+docker compose exec db psql -U postgres
+docker compose run --rm api npm test
+docker compose restart api
+docker compose kill api
+docker-compose up -d
+docker buildx build --platform linux/amd64,linux/arm64 -t app .
+podman ps
+
+# == kubernetes, helm, cloud ==
+kubectl get pods
+kubectl get pods -n staging -o wide
+kubectl describe pod api-7d9f8b
+kubectl logs -f deploy/api
+kubectl logs api-7d9f8b --previous
+kubectl apply -f k8s/
+kubectl delete pod api-7d9f8b
+kubectl rollout restart deploy/api
+kubectl rollout status deploy/api
+kubectl port-forward svc/api 8098:80
+kubectl exec -it api-7d9f8b -- sh
+kubectl config use-context staging
+kubectl scale deploy/api --replicas=3
+kubectl top pods
+kubectl get events --sort-by=.lastTimestamp
+kubectl wait --for=condition=ready pod -l app=api --timeout=60s
+helm repo update
+helm install api ./charts/api
+helm upgrade --install api ./charts/api -f values.yaml
+helm template api ./charts/api
+helm list -A
+helm uninstall api
+minikube start
+kind create cluster
+terraform init
+terraform plan
+terraform apply -auto-approve
+terraform fmt -recursive
+aws s3 ls
+aws s3 sync dist/ s3://example-bucket/site --delete
+aws sts get-caller-identity
+gcloud config list
+az account show
+vercel --prod
+netlify deploy --dir=dist
+fly deploy
+heroku logs --tail -a example-app
+
+# == git: everyday ==
+git status
+git status -sb
+git diff
+git diff --stat
+git diff --cached
+git diff main...HEAD
+git add .
+git add -A
+git add -p
+git commit -m "fix: handle empty input"
+git commit -am "wip"
+git commit --amend --no-edit
+git log --oneline -20
+git log --graph --oneline --all
+git log -p -- src/app.js
+git show HEAD
+git show HEAD~2:src/app.js
+git blame src/app.js
+git fetch
+git fetch --all --prune
+git pull
+git pull --rebase
+git pull --ff-only origin main
+git push
+git push -u origin feature/login
+git push origin --tags
+git push --force-with-lease
+git push --force-with-lease origin feature/login
+git push -f origin feature/login
+git push origin --delete old-branch
+git remote -v
+git remote add upstream https://example.com/org/repo.git
+git branch
+git branch -a
+git branch -d old-branch
+git branch -D old-branch
+git branch -m new-name
+git branch --show-current
+git tag v1.2.3
+git tag -a v1.2.3 -m "release 1.2.3"
+git clone https://example.com/org/repo.git
+git clone --depth 1 https://example.com/org/repo.git /tmp/repo
+git rev-parse HEAD
+git rev-parse --show-toplevel
+git ls-files
+git grep -n "TODO"
+git shortlog -sn
+git reflog
+git config --get user.email
+git config core.autocrlf false
+git describe --tags
+git archive --format=zip HEAD > src.zip
+git gc
+git fsck
+
+# == git: branches and history ==
+# The guards that watch shared trees see no other session here, so all of these pass.
+git checkout main
+git checkout -b feature/login
+git checkout -
+git checkout src/app.js
+git checkout -- src/app.js
+git checkout HEAD~1 -- src/app.js
+git switch main
+git switch -c fix/typo
+git restore src/app.js
+git restore --staged .
+git restore --source=HEAD~1 src/app.js
+git reset HEAD~1
+git reset --soft HEAD~1
+git reset --hard
+git reset --hard HEAD
+git reset --hard origin/main
+git revert HEAD --no-edit
+git merge feature/login
+git merge --no-ff feature/login
+git merge --abort
+git rebase main
+git rebase -i HEAD~3
+git rebase --onto main feature/base feature/login
+git rebase --continue
+git rebase --abort
+git rebase --autosquash -i main
+git cherry-pick abc1234
+git cherry-pick --continue
+git cherry-pick -x abc1234..def5678
+git stash
+git stash push -u -m "wip-login"
+git stash list
+git stash show -p stash@{0}
+git stash apply stash@{1}
+git stash pop
+git stash drop stash@{0}
+git clean -n
+git clean -fd
+git clean -fdx
+git worktree add ../shop-login -b feature/login
+git worktree list
+git worktree remove ../shop-login
+git worktree prune
+git bisect start
+git bisect bad
+git bisect good v1.0.0
+git bisect run npm test
+git bisect reset
+git submodule update --init --recursive
+git submodule status
+git sparse-checkout set src docs
+git lfs pull
+git apply fix.patch
+git format-patch -1 HEAD
+git am < 0001-fix.patch
+git notes add -m "reviewed"
+git -C ../other-repo status
+git -c core.pager=cat log -5
+git log --grep="pkill"
+git log -S"taskkill /IM node.exe" --oneline
+git grep -n "killall node"
+git commit -m "stop using pkill node in scripts"
+git commit -m "replace the sleep 300 poll with a background wait"
+git commit -m "never rm -rf / in CI"
+
+# == gh ==
+gh auth status
+gh repo view --web
+gh repo clone org/repo
+gh pr list
+gh pr view 42
+gh pr checkout 42
+gh pr diff 42
+gh pr create --fill
+gh pr create --title "Add login form" --body "Adds the form and its tests."
+gh pr merge 42 --squash --delete-branch
+gh pr checks 42
+gh pr review 42 --approve
+gh issue list --label bug
+gh issue view 17
+gh issue create --title "Crash on empty input" --body "Steps: run the CLI with no args."
+gh run list --limit 5
+gh run view --log-failed
+gh run watch
+gh release create v1.2.3 --generate-notes
+gh api repos/org/repo/pulls --jq '.[].title'
+gh workflow run test.yml
+gh pr create --title "Kill dev servers by PID" --body "Replaces pkill node with taskkill /PID."
+gh issue comment 17 --body "Please never run killall node on the shared box."
+
+# == make and build tools ==
+make
+make build
+make test
+make -j8
+make clean
+make install PREFIX=$HOME/.local
+make -C docs html
+cmake -S . -B build
+cmake --build build -j 8
+ctest --test-dir build
+ninja -C build
+meson setup build
+bazel build //...
+bazel test //src:all
+just test
+task build
+
+# == curl, wget, http ==
+curl -s https://api.example.com/health
+curl -sf http://localhost:3000/api/health
+curl -I https://example.com
+curl -X POST -H "Content-Type: application/json" -d '{"name":"a"}' http://localhost:3000/api/items
+curl -o /tmp/file.tar.gz -L https://example.com/file.tar.gz
+curl -s http://localhost:8080/metrics | grep http_requests
+curl --retry 5 --retry-delay 2 -s http://localhost:3000
+wget -q https://example.com/data.csv
+wget -O - https://example.com/install.sh | head -20
+http GET :3000/api/items
+
+# == jq, yq ==
+jq . package.json
+jq -r '.scripts | keys[]' package.json
+jq '.dependencies' package.json
+cat data.json | jq '.items[] | select(.active)'
+jq -s 'add' a.json b.json
+yq '.services' docker-compose.yml
+yq -i '.version = "1.2.3"' chart.yaml
+
+# == text: grep, rg, sed, awk ==
+# Searching for and rewriting text that names dangerous commands is not running them.
+grep -rn "TODO" src/
+grep -rn "pkill node" scripts/
+grep -rn "taskkill /IM node.exe" docs/
+grep -c "sleep 600" scripts/poll.sh
+grep -E "killall|pkill" -r .
+grep -v "^#" .env
+rg "useEffect" src
+rg -n "kill -9" scripts
+rg --files | head -50
+rg -l "Stop-Process -Name" .
+rg "sleep 300" -g "*.sh"
+sed -n 1,40p src/app.js
+sed -i 's/localhost:3000/localhost:3001/g' .env.local
+sed -i 's/pkill node/kill $(cat server.pid)/' scripts/stop.sh
+sed -i.bak 's/sleep 600/sleep 6/' scripts/poll.sh
+sed 's/foo/bar/' input.txt > output.txt
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head
+awk -F, 'NR>1 {sum+=$3} END {print sum}' data.csv
+cut -d: -f1 /etc/passwd | head
+sort -u names.txt
+uniq -c counts.txt
+wc -l src/*.js
+tr -d '\r' < in.txt > out.txt
+diff -u a.txt b.txt
+head -n 50 server.log
+tail -n 100 server.log
+tail -f server.log | grep ERROR
+less README.md
+cat README.md
+cat package.json | jq .version
+echo "build finished"
+echo "do not run pkill node or taskkill /IM node.exe here"
+echo "sleep 600 is too long for a foreground wait"
+echo "rm -rf / is never okay"
+printf '%s\n' a b c
+printf 'killall node\n'
+
+# == find, xargs, files ==
+find . -name "*.log" -mtime +7
+find . -name node_modules -prune -o -name "*.ts" -print
+find src -type f -name "*.test.ts" | xargs wc -l
+find . -name "*.pyc" -delete
+find . -type d -name __pycache__ -exec rm -rf {} +
+find . -size +10M
+fd -e ts
+xargs -n1 echo < list.txt
+ls
+ls -la
+ls -lah dist/
+tree -L 2 src
+du -sh node_modules
+df -h
+stat package.json
+file build/app
+mkdir -p build/out
+touch .env.local
+cp .env.example .env
+cp -r templates/ out/
+mv old.js new.js
+ln -s ../shared shared
+chmod +x scripts/deploy.sh
+chown -R "$USER" .cache
+rm -f build.log
+rm -rf node_modules
+rm -rf dist build .next
+rm -rf ./coverage
+rm -rf node_modules/.cache
+rm -rf ~/.cache/pip
+rm -rf /tmp/bulkhead-build
+rm -rf "$TMPDIR/scratch"
+rm -rf ../shop-login
+rm -rf *.egg-info
+rm -r out
+rmdir empty-dir
+tar -czf dist.tar.gz dist
+tar -xzf archive.tar.gz -C /tmp/x
+zip -r site.zip dist
+unzip -o assets.zip -d public
+gzip -k big.log
+realpath .
+basename "$PWD"
+dirname src/app.js
+which node
+command -v python3
+type -a git
+env | sort
+printenv PATH
+export NODE_ENV=development
+source .env
+date
+whoami
+uname -a
+hostname
+uptime
+free -h
+nproc
+sysctl -n hw.ncpu
+sw_vers
+lsb_release -a
+cat /etc/os-release
+history | tail -20
+clear
+cd src && ls
+pushd web && npm test && popd
+
+# == ssh, scp, rsync ==
+ssh build-host uptime
+ssh -o BatchMode=yes deploy@build-host 'cd /srv/app && git pull && npm ci'
+ssh build-host "tail -n 50 /var/log/app.log"
+scp dist.tar.gz deploy@build-host:/srv/app/
+scp -r deploy@build-host:/srv/app/logs ./logs
+rsync -avz --delete dist/ deploy@build-host:/srv/app/dist/
+rsync -av --exclude node_modules ./ /tmp/copy/
+ssh-keygen -t ed25519 -f ~/.ssh/id_deploy -N ""
+ssh-add -l
+
+# == processes by PID, port or job ==
+# Stopping exactly what this session started is the right thing to do.
+kill 4312
+kill -9 4312
+kill -TERM 4312
+kill -INT "$SERVER_PID"
+kill -0 4312 2>/dev/null && echo alive
+kill $(cat server.pid)
+kill $(cat .pids/web.pid) && rm .pids/web.pid
+kill -TERM "$(cat server.pid)"
+xargs kill < server.pid
+kill %1
+kill %%
+kill $!
+kill -- -4312
+kill $(jobs -p)
+jobs -l
+wait
+disown -a
+kill $(lsof -ti :3000)
+kill -9 $(lsof -t -i:5173)
+lsof -ti :3000 | xargs kill
+lsof -ti tcp:8080 | xargs -r kill -9
+lsof -i :3000
+fuser -k 3000/tcp
+fuser 8080/tcp
+ps aux | grep node
+ps aux | grep [n]ode
+ps -ef | grep -v grep | grep python
+ps -o pid,ppid,etime,cmd -p 4312
+ps aux --sort=-%mem | head
+pgrep -af node
+pgrep -l python
+pgrep -f "node server.js" && echo running
+pkill -f ./scripts/worker.py
+pkill -f "python scripts/worker.py"
+pkill -f "node server.js"
+pkill -f node_modules/.bin/vite
+pkill -P $$
+pkill -f gunicorn
+pkill nginx
+pkill -HUP nginx
+pkill redis-server
+pkill -f "celery worker"
+killall -0 node
+killall Finder
+killall Dock
+sudo killall -HUP mDNSResponder
+trap 'kill $(jobs -p)' EXIT
+trap "pkill -P $$" EXIT
+top -b -n 1 | head -20
+htop
+# pgrep -f with a script path is as narrow as the pkill -f form above.
+kill $(pgrep -f "node server.js")
+pgrep -f "python worker.py" | xargs kill
+# These kill inside a container or on another machine, not on this one.
+docker exec web pkill -f node
+docker compose exec api pkill node
+
+# == background jobs, sleeps and timeouts ==
+# Short waits, bounded loops and backgrounded servers.
+sleep 1
+sleep 2 && curl -s localhost:3000/health
+sleep 0.5; tail -5 dev.log
+sleep 10
+sleep 30
+npm run dev > dev.log 2>&1 &
+npm run dev & sleep 5; curl -s localhost:3000; kill %1
+nohup node server.js > server.log 2>&1 & echo $! > server.pid
+(cd web && npm run dev) &
+python -m http.server 8000 & PID=$!; sleep 2; curl -s localhost:8000; kill $PID
+timeout 60 npm test
+timeout 30 tail -f server.log
+timeout 120 bash -c 'until curl -sf localhost:3000; do sleep 2; done'
+timeout 10s node script.js
+gtimeout 30 make test
+for i in 1 2 3; do curl -sf localhost:3000 && break; sleep 2; done
+for i in $(seq 1 10); do curl -sf localhost:3000/health && break; sleep 3; done
+for f in src/*.ts; do npx tsc --noEmit "$f"; done
+for d in packages/*; do (cd "$d" && npm test); done
+while read -r line; do echo "$line"; done < list.txt
+until curl -sf localhost:3000; do sleep 1; done
+watch -n 5 kubectl get pods
+npx vitest --watch
+npm run test:watch
+npx jest --watch
+cargo watch -x check
+ptw -- -x
+tail -f server.log & sleep 3; kill %1
+wait $PID
+
+# == heredocs that write scripts ==
+# Writing a file is not running it, whatever the file says.
+cat > stop.sh <<'EOF'<NL>#!/bin/sh<NL>pkill -f node<NL>EOF
+cat > poll.sh <<'EOF'<NL>#!/usr/bin/env bash<NL>while true; do sleep 300; done<NL>EOF
+cat > scripts/reset.sh <<EOF<NL>#!/bin/sh<NL>killall -9 node<NL>sleep 600<NL>EOF
+cat >> Makefile <<'EOF'<NL>stop:<NL><TAB>pkill node<NL>EOF
+cat <<'EOF' > stop.ps1<NL>Stop-Process -Name node -Force<NL>EOF
+tee scripts/clean.sh <<'EOF'<NL>killall node<NL>EOF
+tee -a notes.md <<'EOF'<NL>never run taskkill /F /IM node.exe here<NL>EOF
+cat > kill_old.py <<'PY'<NL>import os<NL>os.system("pkill -f node")<NL>PY
+cat > .github/workflows/ci.yml <<'YAML'<NL>jobs:<NL>  t:<NL>    steps:<NL>      - run: sleep 400<NL>YAML
+cat > wait.sh <<'EOF'<NL>until [ -f done ]; do sleep 30; done<NL>EOF<NL>chmod +x wait.sh
+printf '#!/bin/sh\npkill node\n' > stop.sh
+echo 'killall node' >> notes.txt
+cat > notes.md <<'EOF'<NL>rm -rf / and git push --force origin main are both blocked<NL>EOF
+
+# == editors and misc developer tools ==
+code .
+code --diff a.js b.js
+vim src/app.js
+nano .env
+open http://localhost:3000
+xdg-open README.md
+sqlite3 app.db ".tables"
+psql -h localhost -U postgres -c "select 1"
+mysql -u root -e "show databases"
+redis-cli ping
+mongosh --eval "db.stats()"
+ffprobe -v error -show_format clip.mp4
+convert logo.png -resize 64x64 icon.png
+openssl rand -hex 32
+base64 -d token.txt
+shasum -a 256 dist.tar.gz
+sha256sum dist.tar.gz
+md5sum file.bin
+hexdump -C file.bin | head
+strings app.bin | grep -i version
+nc -zv localhost 5432
+dig example.com
+nslookup example.com
+ping -c 3 example.com
+traceroute example.com
+crontab -l
+systemctl status nginx
+sudo systemctl restart nginx
+journalctl -u app --since "10 min ago"
+brew install jq
+brew upgrade
+apt list --installed | grep python
+sudo apt-get install -y build-essential
+winget list
+choco list
+scoop install ripgrep
+
+#@ tool PowerShell
+# == PowerShell ==
+# The same daily work on Windows: processes by Id, ports, files and sleeps.
+Get-ChildItem
+Get-ChildItem -Recurse -Filter *.log | Remove-Item
+Get-Content server.log -Tail 50
+Get-Content server.log -Wait -Tail 10
+Select-String -Path src\*.ts -Pattern "TODO"
+Select-String -Path scripts\*.ps1 -Pattern "Stop-Process -Name node"
+Set-Location web
+Test-Path .env
+New-Item -ItemType Directory -Force build\out
+Copy-Item .env.example .env
+Move-Item old.txt new.txt
+Remove-Item -Recurse -Force node_modules
+Remove-Item -Recurse -Force .\dist
+Remove-Item build.log
+Remove-Item -Recurse -Force "$env:TEMP\scratch"
+Get-Process
+Get-Process node
+Get-Process -Name node -ErrorAction SilentlyContinue
+Get-Process node | Select-Object Id, StartTime, Path
+Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10
+Get-Process -Id 4312
+Get-Process -Id 4312 | Stop-Process
+Stop-Process -Id 4312
+Stop-Process -Id 4312 -Force
+Stop-Process -Id $pid -Force
+Get-Process node | Where-Object { $_.Id -eq 4312 } | Stop-Process
+Get-Process node | Where-Object { $_.Path -like '*\shop\*' } | Stop-Process
+Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*\shop\*' } | Select-Object ProcessId, CommandLine
+Get-CimInstance Win32_Process | ? { $_.CommandLine -like '*\shop\*' } | % { Stop-Process -Id $_.ProcessId }
+Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Select-Object ProcessId, CommandLine
+Get-CimInstance Win32_Process -Filter "ProcessId=4312" | Invoke-CimMethod -MethodName Terminate
+Get-NetTCPConnection -LocalPort 3000 | Select-Object -ExpandProperty OwningProcess
+Get-NetTCPConnection -LocalPort 3000 | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }
+(Get-NetTCPConnection -LocalPort 5173).OwningProcess | ForEach-Object { Stop-Process -Id $_ }
+Start-Sleep -Seconds 2
+Start-Sleep 5; Invoke-WebRequest http://localhost:3000 -UseBasicParsing
+Start-Sleep -Milliseconds 500
+foreach ($i in 1..5) { if (Test-Path done.flag) { break }; Start-Sleep 2 }
+Start-Process npm -ArgumentList 'run','dev' -NoNewWindow
+Start-Job { npm run dev }
+Get-Job | Stop-Job
+Invoke-RestMethod http://localhost:3000/api/health
+Invoke-WebRequest https://example.com -OutFile page.html
+$env:NODE_ENV = 'production'; node server.js
+$env:PORT = 3002; npm run dev
+npm run build 2>&1 | Select-Object -Last 20
+npx vitest run --maxWorkers=4
+dotnet test
+Write-Host "never use Stop-Process -Name node"
+Write-Output "sleep 600"
+Get-Command node
+Get-ItemProperty HKCU:\Environment
+Get-Service | Where-Object Status -eq Running
+Get-CimInstance Win32_OperatingSystem | Select-Object FreePhysicalMemory
+Get-FileHash dist.zip
+Compress-Archive -Path dist\* -DestinationPath dist.zip
+Expand-Archive assets.zip -DestinationPath public
+taskkill /PID 4312 /T /F
+taskkill /PID 4312 /F
+taskkill /F /FI "PID eq 4312"
+taskkill /IM notepad.exe /F
+taskkill /IM qemu-system-x86_64.exe /F
+netstat -ano | findstr :3000
+tasklist | findstr node
+tasklist /FI "IMAGENAME eq node.exe"
+wmic process where processid=4312 get commandline
+git status
+git checkout main
+git stash push -u -m "wip"
+winget upgrade --all --include-unknown
+$p = Start-Process node -ArgumentList server.js -PassThru; Start-Sleep 3; Stop-Process -Id $p.Id
+Get-Process -Name node | Where-Object { $_.StartTime -gt (Get-Date).AddMinutes(-5) } | Format-Table Id, StartTime
+
+#@ tool Bash
+# == cmd ==
+# cmd.exe forms that agents run through Git Bash.
+cmd /c dir
+cmd //c "echo hello"
+cmd /c "npm run build"
+cmd /c "taskkill /PID 4312 /T /F"
+cmd.exe /c ver
+taskkill //PID 4312 //T //F
+taskkill //F //PID 4312
+tasklist //FI "PID eq 4312"
+where node
+dir /b
+type package.json
+set NODE_ENV=production&& node server.js
+timeout /t 2 /nobreak
+ping -n 2 127.0.0.1 > nul
+rd /s /q dist
+rmdir /s /q node_modules
+del /q build.log
+copy .env.example .env
+xcopy /e /i templates out
+powershell -NoProfile -Command "Get-Process -Id 4312"
+powershell -NoProfile -Command "Stop-Process -Id 4312 -Force"
+powershell -Command "Get-Content server.log -Tail 20"
+pwsh -c "Test-Path .env"
+MSYS_NO_PATHCONV=1 taskkill /PID 4312 /T /F
+
+# == agent patterns ==
+# Things Claude Code agents typically chain together.
+cd web && npm ci && npm run build
+cd /tmp && ls
+npm run lint && npm test && npm run build
+npx tsc --noEmit 2>&1 | head -30
+git add -A && git commit -m "feat: add form" && git log --oneline -1
+git fetch origin && git rebase origin/main
+git stash push -u -m "agent-wip-123" && git stash list --format='%H %gs' | head -1
+npm test || (echo "tests failed"; exit 1)
+test -f .env || cp .env.example .env
+[ -d node_modules ] || npm ci
+if [ -f package-lock.json ]; then npm ci; else npm install; fi
+set -euo pipefail; npm ci; npm test
+echo $?
+ls dist && du -sh dist
+node -e "require('fs').writeFileSync('out.json', JSON.stringify({ok:true}))"
+python3 - <<'EOF'<NL>import json<NL>print(json.dumps({"ok": True}))<NL>EOF
+node <<'EOF'<NL>console.log(1 + 1)<NL>EOF
+bash scripts/check.sh
+sh -c "npm test"
+bash -c "cd web && npm run build"
+bash -lc "nvm use 20 && node -v"
+env -i PATH="$PATH" node -v
+time npm run build
+nice -n 10 make -j4
+xargs -P 4 -I{} sh -c 'echo {}' < list.txt
+diff <(jq -S . a.json) <(jq -S . b.json)
+cat <<'EOF' | kubectl apply -f -<NL>apiVersion: v1<NL>kind: Namespace<NL>metadata:<NL>  name: dev<NL>EOF
+gh pr view 42 --json title,body | jq -r .body
+npx --yes kill-port 3000 && npm run dev &
+curl -s localhost:3000 > /dev/null && echo up || echo down
+grep -q "ready" dev.log && echo ready
+tail -n 20 dev.log; grep -c ERROR dev.log
+mkdir -p out && node scripts/export.js > out/data.json
+date +%s > .started
+
+# == bulkhead itself ==
+# The plugin's own commands, its files and its settings.
+bulkhead status
+bulkhead status --json
+bulkhead status --json | jq '.sessions | length'
+bulkhead top --interval=5
+bulkhead log
+bulkhead log -n 20
+bulkhead log --since 7d --guard kill-guard
+bulkhead log --summary
+bulkhead log --json | jq length
+bulkhead doctor
+bulkhead doctor --json
+BULKHEAD_NO_LOG=1 bulkhead doctor
+bulkhead config
+bulkhead config --json
+bulkhead port
+bulkhead port --near 3000
+bulkhead port --json
+npx next dev -p $(bulkhead port --near 3000)
+PORT=$(bulkhead port --near 5173) npm run dev:vite
+bulkhead slot status
+bulkhead-slot status --gb=4
+bulkhead-slot run --gb=3 -- npm test
+bulkhead slot run --gb=4 --wait=20 --label=e2e -- npx playwright test
+bulkhead remote status
+bulkhead remote status --json
+bulkhead remote list
+bulkhead remote add buildbox dev@192.168.1.20 --ssh-option=IdentityFile=~/.ssh/buildbox
+bulkhead remote run -- npm test
+bulkhead remote run --gb=4 --tail=40 --label=e2e -- npx playwright test
+bulkhead remote run -- 'npm ci && npm run build'
+bulkhead remote fetch playwright-report
+bulkhead-statusline
+tail -20 ~/.claude/bulkhead/guards.log
+tail -5 ~/.claude/bulkhead/events.jsonl
+cat ~/.claude/bulkhead/config.json
+ls ~/.claude/bulkhead/slots
+mkdir -p .claude && echo '{"portGuard":{"ignorePorts":[3000]}}' > .claude/bulkhead.json
+jq '.killGuard.allowNames' ~/.claude/bulkhead/config.json
+BULKHEAD_DISABLE=kill-guard npm test
+
+# == messages that name dangerous commands ==
+# Commit, pull request and release text is never run, whatever it says.
+git commit -m "stop: replace pkill node with taskkill /PID"
+git commit -am "remove the sleep 600 poll"
+git tag -a v1.4.0 -m "rm -rf / is now blocked"
+git stash push -m "before git reset --hard"
+git merge --no-ff feature -m "Merge: Stop-Process -Name node cleanup"
+git commit -m "$(cat <<'EOF'<NL>Kill dev servers by PID<NL><NL>killall node took down other sessions.<NL>EOF<NL>)"
+git commit -F - <<'EOF'<NL>Stop running pkill node in scripts<NL><NL>Also drop sleep 900 and git push --force origin main.<NL>EOF
+gh pr create --title "Stop pkill node" --body "$(cat <<'EOF'<NL>## Summary<NL>- replace killall node<NL>- sleep 600 was a poll<NL>EOF<NL>)"
+gh issue comment 5 -F - <<EOF<NL>rm -rf / happened on the shared box<NL>EOF
+gh release create v2.0.0 --notes "taskkill /IM node.exe is blocked now"
+gh pr comment 3 -b "Stop-Process -Name node is blocked"
+gh pr edit 3 --body "git checkout main in a shared tree is blocked"
+glab mr create --title "cleanup" --description "git reset --hard removed"
+gh api repos/org/repo/issues/9/comments -f body="pkill -f vite, then sleep 300"
+
+# == wrappers around ordinary commands ==
+bash -c "npm run lint"
+sh -c 'echo pkill node'
+bash -c "git status && git log --oneline -3"
+bash -lc 'nvm use 20 && npm ci'
+zsh -c "source ~/.zshrc && node -v"
+powershell -NoProfile -Command "Get-Process node | Select-Object Id, Path"
+pwsh -c "Stop-Process -Id 4312"
+cmd /c "npm run lint"
+sudo -u www-data php artisan migrate
+env NODE_ENV=test node -v
+NODE_ENV=production npm run start:api
+nohup node server.js > out.log 2>&1 &
+time npm run lint
+nice -n 10 make -j2
+xargs -I{} rm -f {} < stale-files.txt
+eval "$(ssh-agent -s)"
+eval "$(fnm env --use-on-cd)"
+trap 'kill $SERVER_PID' EXIT
+trap "rm -f /tmp/build.lock" EXIT
+watch -n 2 git status
+find . -name "*.pid" -exec cat {} \;
+
+# == kills that stay scoped ==
+pkill -f "$PWD/server.js"
+pkill -f ./node_modules/.bin/next
+pkill -0 node
+killall -s 0 node
+pkill -s 0 node
+pkill -P $$ node
+kill -0 $(pgrep node)
+pidof node
+ps -C node -o pid,etime
+ps aux | grep node | grep -v grep
+pgrep -fl "vite --port 5174"
+kill $(cat .pids/vite.pid)
+taskkill /F /IM myapp.exe
+taskkill /F /FI "IMAGENAME eq myapp.exe"
+# Commands run inside a container or on another machine.
+ssh build-host "pkill -f node"
+ssh build-host 'killall node; systemctl restart app'
+kubectl exec api-0 -- pkill node
+podman exec web killall node
+docker run --rm alpine pkill node
+ssh deploy@build-host "rm -rf /tmp/build"
+ssh build-host 'cd /srv/app && git checkout main && git pull'
+#@ tool PowerShell
+Get-Process node | Where-Object { $_.Path -like '*\shop\*' } | ForEach-Object { $_.Kill() }
+Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Where-Object { $_.CommandLine -like '*shop*' } | Invoke-CimMethod -MethodName Terminate
+Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Invoke-CimMethod -MethodName GetOwner
+Stop-Process -Name node -WhatIf
+Get-Process node | Stop-Process -WhatIf
+(Get-Process -Id 4312).Kill()
+Get-Process -Name myapp | Stop-Process
+Stop-Process -Name notepad
+Get-Process | Where-Object { $_.WorkingSet64 -gt 2GB } | Select-Object Name, Id
+powershell -NoProfile -Command "Get-Process -Id 4312 | Stop-Process"
+#@ tool Bash
+
+#@ timeout 600000
+# == short or backgrounded waits with a long tool timeout ==
+sleep 60
+sleep 30 && curl -s localhost:3000/health
+for i in 1 2 3; do sleep 10; done
+timeout /t 5 /nobreak
+ping -n 3 127.0.0.1 > nul
+ping -c 4 localhost
+python -c "import time; time.sleep(2)"
+node -e "setTimeout(() => process.exit(0), 5000)"
+ruby -e "sleep 3"
+python3 - <<'EOF'<NL>import time<NL>time.sleep(1)<NL>print("ok")<NL>EOF
+tail -n 50 server.log
+tail -f server.log &
+timeout 60 tail -f server.log
+bash -c "sleep 300" &
+nohup sleep 600 &
+ssh build-host "sleep 300" &
+docker exec -d web sleep 600
+docker logs web --tail 100
+kubectl logs api-0 --tail=50
+journalctl -u app -n 100
+echo "sleep 600"
+git commit -m "replace sleep 900 with a background wait"
+docker run -d --name web nginx
+#@ tool PowerShell
+Start-Sleep 5
+Start-Job { Start-Sleep 600 }
+#@ tool Bash
+#@ timeout default
+
+#@ state low-ram
+# == light commands while RAM is low ==
+pytest -x
+python -m pytest tests/test_api.py
+npx vite preview
+npx next start
+npm ci
+npm install
+go test ./internal/auth
+./gradlew tasks
+./gradlew --stop
+mvn -v
+mvn dependency:tree
+docker ps
+docker compose logs api
+npx tsc --version
+npx vitest --version
+ssh build-host npm test
+git commit -m "run vitest in CI"
+grep -rn jest package.json
+ls jest.config.js
+cat vitest.config.ts
+npx playwright install chromium
+npx playwright show-report
+docker exec web npm test
+bulkhead-slot run --gb=3 -- npm test
+bulkhead remote run --gb=4 -- npx playwright test
+#@ state default
+
+#@ state busy-ports
+# == another session holds the default ports ==
+npx next dev -p 3999
+npx vite --port 5199
+npm run dev -- -p 3999
+bulkhead remote run -- npx next dev -p 3000
+python -m http.server 8999
+curl -s localhost:3000/api/health
+lsof -i :3000
+netstat -ano | findstr :3000
+bulkhead port --near 3000
+kill $(lsof -ti :3999)
+npx kill-port 3999
+fuser -k 3999/tcp
+#@ config {"portGuard":{"ignorePorts":[3000]}}
+npx next dev
+npx kill-port 3000
+#@ config none
+#@ state default
+
+#@ state shared-tree
+# == another session works in the same tree ==
+git status
+git diff --stat
+git log --oneline -5
+git stash list
+git stash show -p stash@{0}
+git branch -a
+git fetch origin
+git add -A && git commit -m "wip"
+git restore --staged src/app.js
+git worktree add ../shop-fix -b fix/login
+git rebase --continue
+git merge --abort
+git show HEAD:src/app.js
+bash -c "git status"
+GIT_PAGER=cat git log -3
+#@ state default
+
+# == settings that change what a guard allows ==
+#@ config {"killGuard":{"allowNames":["node"]}}
+pkill node
+killall node
+taskkill /F /IM node.exe
+#@ config {"killGuard":{"enabled":false}}
+pkill -f python
+#@ config none

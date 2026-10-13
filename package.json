@@ -1,0 +1,29 @@
+{
+  "name": "claude-bulkhead",
+  "version": "0.1.0",
+  "description": "Claude Code hooks for a machine shared by many sessions and subagents",
+  "private": true,
+  "license": "MIT",
+  "author": "Myeongseok-Kang",
+  "repository": "github:Myeongseok-Kang/claude-bulkhead",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "bulkhead": "bin/bulkhead",
+    "bulkhead-slot": "bin/bulkhead-slot",
+    "bulkhead-statusline": "bin/bulkhead-statusline"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "eslint .",
+    "test:corpus": "node --test test/corpus.test.js",
+    "test:fuzz": "node --test test/fuzz.test.js",
+    "coverage": "node --test --experimental-test-coverage"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "eslint": "9.39.4",
+    "globals": "16.5.0"
+  }
+}

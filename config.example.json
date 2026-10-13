@@ -1,0 +1,56 @@
+{
+  "killGuard": {
+    "enabled": true,
+    "allowNames": ["ffmpeg"],
+    "extraSharedNames": ["postgres", "redis-server"]
+  },
+  "waitGuard": {
+    "enabled": true,
+    "limitSeconds": 240
+  },
+  "memoryGuard": {
+    "enabled": true
+  },
+  "memory": {
+    "minFreeGb": 3,
+    "slotFloorGb": 5,
+    "maxCommitPct": 75
+  },
+  "portGuard": {
+    "enabled": true,
+    "ignorePorts": [9229]
+  },
+  "checkoutGuard": {
+    "enabled": true
+  },
+  "basics": {
+    "enabled": true,
+    "protectedBranches": ["main", "master", "release"],
+    "rmRoot": true,
+    "forcePushMain": true,
+    "discardChanges": true
+  },
+  "orphanReaper": {
+    "enabled": true,
+    "onSessionEnd": true,
+    "extraNames": ["my-server"],
+    "keepNames": ["mongod"]
+  },
+  "log": {
+    "enabled": true
+  },
+  "remote": {
+    "default": "buildbox"
+  },
+  "remotes": {
+    "buildbox": {
+      "host": "dev@192.168.1.20",
+      "shell": "bash",
+      "dir": "~/bulkhead-remote",
+      "copies": 4,
+      "maxJobs": 4,
+      "minFreeGb": 2,
+      "sshOptions": ["IdentityFile=~/.ssh/buildbox"]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+name: Bug
+description: Something does not work, a command misses a block it should catch, or output is wrong
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran or what Claude ran, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps or command
+      description: The exact command for a missed block. For `bulkhead top`, `status` or `doctor`, the command line and terminal.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `bulkhead doctor`
+      description: Run `/bulkhead:doctor` in Claude Code, or `node <plugin path>/bin/bulkhead doctor`. Replace project names and paths if you prefer.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - WSL
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      placeholder: v22.11.0
+  - type: input
+    id: claude
+    attributes:
+      label: Claude Code version
+      placeholder: claude --version

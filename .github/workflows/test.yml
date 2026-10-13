@@ -1,0 +1,56 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [18, 22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # Unit tests, the false-positive and must-block corpus (test/corpus.test.js) and the fuzz test.
+      # The runtime has no dependencies, so nothing is installed for this step.
+      - run: node --test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run coverage
+        env:
+          # Coverage instrumentation makes every check several times slower.
+          FUZZ_LONG_LIMIT_MS: 6000
+
+  # bulkhead remote against a real sshd on localhost: transfer, copies, ports, exit codes and a
+  # dropped connection. The matrix above runs the same paths through test/fake-ssh.js.
+  remote-ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bash scripts/remote-e2e.sh

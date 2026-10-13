@@ -1,0 +1,38 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/orphan-reaper.js"], "async": true }
+        ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/config-check.js"], "timeout": 10 }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/orphan-reaper.js", "--session-end"] }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/kill-guard.js"], "timeout": 10 },
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/wait-guard.js"], "timeout": 10 },
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/memory-guard.js"], "timeout": 15 },
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/port-guard.js"], "timeout": 20 },
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/checkout-guard.js"], "timeout": 15 },
+          { "type": "command", "command": "node", "args": ["${CLAUDE_PLUGIN_ROOT}/src/basics.js"], "timeout": 10 }
+        ]
+      }
+    ]
+  }
+}

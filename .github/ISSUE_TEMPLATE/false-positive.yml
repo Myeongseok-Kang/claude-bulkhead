@@ -1,0 +1,71 @@
+name: False positive
+description: A guard blocked a command it should have let through
+labels: ["false positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks. A false positive is fixed by adding your exact command to the guard's tests, so the command itself matters most.
+        `bulkhead log -n 5` shows recent blocks with the guard and rule. Remove secrets from the command, but keep its shape and quoting.
+  - type: dropdown
+    id: guard
+    attributes:
+      label: Guard
+      options:
+        - kill-guard
+        - wait-guard
+        - memory-guard
+        - port-guard
+        - checkout-guard
+        - basics
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: The exact command
+      description: As Claude ran it, including line breaks and quotes. This is pasted into a test as is.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: message
+    attributes:
+      label: The block message
+      description: What bulkhead printed, or the matching line from `bulkhead log --json`.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it is safe
+      description: What the command does, and why it does not affect other sessions or lose work. If it is safe only in your project, say so; a config key may be the right fix.
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - WSL
+    validations:
+      required: true
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Tool
+      options:
+        - Bash
+        - PowerShell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: bulkhead version
+      description: From `/plugin` or the plugin cache path.

@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" role="img" aria-labelledby="t d">
+<title id="t">bulkhead remote</title>
+<desc id="d">This machine has 1.8 GB of RAM free, so memory-guard holds npm test. The session runs bulkhead remote run --tail=20 -- npm test instead. Only the new commit and three changed files, 24 KB, go over SSH to buildbox. The run takes copy a and port 7172 there, and buildbox's free RAM drops while it runs. 412 tests pass, the last 20 lines come back, and buildbox frees the port and the copy. Free RAM on this machine never changes.</desc>
+<style>
+.m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.s{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.tx{fill:#e6edf3}.mu{fill:#8b98a8}.dm{fill:#5d6877}.ac{fill:#34d6b4}.rd{fill:#f2545b}
+.cap{font-size:26px;font-weight:600;letter-spacing:-.01em}
+.lab{font-size:14px;font-weight:600;letter-spacing:.12em}
+.a{animation-duration:14s;animation-iteration-count:infinite;animation-timing-function:linear;animation-fill-mode:both}
+.sx,.pg,.jr{transform-box:fill-box;transform-origin:0 50%}
+.c1,.c2,.c3,.c4,.bk1,.l4,.l5,.l6,.r1,.r2,.r3,.r4,.r5,.p3,.po,.pb,.f1{opacity:0}
+.c1{animation-name:c1}
+@keyframes c1{0%,1.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}3.1%,24.5%{opacity:1;transform:none}26%,100%{opacity:0;transform:none}}
+.c2{animation-name:c2}
+@keyframes c2{0%,26%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}27.6%,44.5%{opacity:1;transform:none}46%,100%{opacity:0;transform:none}}
+.c3{animation-name:c3}
+@keyframes c3{0%,46%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}47.6%,72.5%{opacity:1;transform:none}74%,100%{opacity:0;transform:none}}
+.c4{animation-name:c4}
+@keyframes c4{0%,74%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}75.6%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.mk1{animation-name:mk1}
+@keyframes mk1{0%,4%{transform:translateX(0);animation-timing-function:steps(8,end)}9%,96.5%{transform:translateX(76.8px)}98%,100%{transform:translateX(0)}}
+.cr1{animation-name:cr1}
+@keyframes cr1{0%,3.9%{opacity:0;transform:none}4%{opacity:1;transform:none;animation-timing-function:steps(8,end)}9%,11%{opacity:1;transform:translateX(76.8px)}11.1%,100%{opacity:0;transform:translateX(76.8px)}}
+.cm1{animation-name:cm1}
+@keyframes cm1{0%,11%{fill:#e6edf3}12.5%,100%{fill:#8b98a8}}
+.sx1{animation-name:sx1}
+@keyframes sx1{0%,11%{transform:scaleX(0);animation-timing-function:cubic-bezier(.65,0,.35,1)}13%,96.5%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+.bk1{animation-name:bk1}
+@keyframes bk1{0%,12.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}14.1%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.sq1{animation-name:sq1}
+@keyframes sq1{0%,24.5%{opacity:1}26.5%,96.5%{opacity:.4}98%,100%{opacity:1}}
+.p3{animation-name:p3}
+@keyframes p3{0%,28%{opacity:0}28.1%,96.5%{opacity:1}98%,100%{opacity:0}}
+.mk3{animation-name:mk3}
+@keyframes mk3{0%,29%{transform:translateX(0);animation-timing-function:steps(41,end)}38%,96.5%{transform:translateX(393.6px)}98%,100%{transform:translateX(0)}}
+.cr3{animation-name:cr3}
+@keyframes cr3{0%,28.9%{opacity:0;transform:none}29%{opacity:1;transform:none;animation-timing-function:steps(41,end)}38%,40%{opacity:1;transform:translateX(393.6px)}40.1%,100%{opacity:0;transform:translateX(393.6px)}}
+.l4{animation-name:l4}
+@keyframes l4{0%,47.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}49.1%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.l5{animation-name:l5}
+@keyframes l5{0%,79%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}80.6%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.l6{animation-name:l6}
+@keyframes l6{0%,80.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}82.1%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.hl{animation-name:hl}
+@keyframes hl{0%,9%{stroke:#2a3646}11%,24.5%{stroke:#f2545b}26%,100%{stroke:#2a3646}}
+.po{animation-name:po}
+@keyframes po{0%,39%{opacity:0;transform:translateX(0);animation-timing-function:cubic-bezier(.45,0,.55,1)}40%{opacity:1;transform:translateX(0);animation-timing-function:cubic-bezier(.45,0,.55,1)}45%{opacity:1;transform:translateX(64px)}46%,100%{opacity:0;transform:translateX(64px)}}
+.pb{animation-name:pb}
+@keyframes pb{0%,74.5%{opacity:0;transform:translateX(0);animation-timing-function:cubic-bezier(.45,0,.55,1)}75.5%{opacity:1;transform:translateX(0);animation-timing-function:cubic-bezier(.45,0,.55,1)}79%{opacity:1;transform:translateX(-64px)}80%,100%{opacity:0;transform:translateX(-64px)}}
+.ln{animation-name:ln}
+@keyframes ln{0%,39%{stroke:#2a3646}40%,45%{stroke:#34d6b4}47%,74.5%{stroke:#2a3646}75.5%,79%{stroke:#34d6b4}81%,100%{stroke:#2a3646}}
+.r1{animation-name:r1}
+@keyframes r1{0%,45.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}47.1%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.r2{animation-name:r2}
+@keyframes r2{0%,47%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}48.6%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.ca{animation-name:ca}
+@keyframes ca{0%,47%{fill-opacity:0;stroke-opacity:.35}48.5%,84%{fill-opacity:.85;stroke-opacity:1}86%,100%{fill-opacity:0;stroke-opacity:.35}}
+.ct{animation-name:ct}
+@keyframes ct{0%,47%{fill:#5d6877}48.5%,84%{fill:#0d1117}86%,100%{fill:#5d6877}}
+.r3{animation-name:r3}
+@keyframes r3{0%,49.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}51.1%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.pg{animation-name:pg}
+@keyframes pg{0%,50.5%{transform:scaleX(0);animation-timing-function:cubic-bezier(.4,.1,.6,1)}72%,96.5%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+.r4{animation-name:r4}
+@keyframes r4{0%,72.5%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}74.1%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.r5{animation-name:r5}
+@keyframes r5{0%,84%{opacity:0;transform:translateY(5px);animation-timing-function:cubic-bezier(.22,.61,.36,1)}85.6%,96.5%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+.jr{animation-name:jr}
+@keyframes jr{0%,50.5%{transform:scaleX(0);animation-timing-function:cubic-bezier(.22,.61,.36,1)}53.5%,84%{transform:scaleX(1);animation-timing-function:cubic-bezier(.65,0,.35,1)}87%,100%{transform:scaleX(0)}}
+.f0{animation-name:f0}
+@keyframes f0{0%,51%{opacity:1}52.5%,84.5%{opacity:0}86.5%,100%{opacity:1}}
+.f1{animation-name:f1}
+@keyframes f1{0%,51%{opacity:0}52.5%,84.5%{opacity:1}86.5%,100%{opacity:0}}
+.hr{animation-name:hr}
+@keyframes hr{0%,47%{stroke:#2a3646}48.5%,84%{stroke:#34d6b4;stroke-opacity:.55}86%,100%{stroke:#2a3646}}
+@media (prefers-reduced-motion:reduce){.a{animation:none!important}.c1,.bk1{opacity:1}.mk1{transform:translateX(76.8px)}.sx1{transform:scaleX(1)}}
+</style>
+<defs>
+<clipPath id="tl"><rect x="16" y="152" width="448" height="196"/></clipPath>
+</defs>
+
+<rect x="0.5" y="0.5" width="1199" height="439" rx="22" fill="#0d1117" stroke="#222b37"/>
+
+<!-- header -->
+<g class="s cap tx">
+<text class="a c1" x="40" y="52">No RAM to spare here. memory-guard holds the test run.</text>
+<text class="a c2" x="40" y="52">bulkhead remote sends it to a machine that has room.</text>
+<text class="a c3" x="40" y="52">Only the changes travel. The job gets its own copy and port.</text>
+<text class="a c4" x="40" y="52">The last 20 lines come back. Nothing is left running there.</text>
+</g>
+<text class="m mu" x="1160" y="50" font-size="15" text-anchor="end">acme-web</text>
+<line x1="40" y1="68" x2="1160" y2="68" stroke="#1d2530"/>
+
+<!-- this machine -->
+<g transform="translate(40 0)">
+<rect class="a hl" x="0" y="84" width="480" height="324" rx="14" fill="#131a23" stroke="#2a3646"/>
+<text class="m tx" x="22" y="116" font-size="19" font-weight="700">this machine</text>
+<text class="s dm" x="458" y="116" font-size="14" text-anchor="end">4 sessions</text>
+<text class="m dm" x="22" y="138" font-size="14">acme-web/</text>
+<rect x="16" y="152" width="448" height="196" rx="8" fill="#0a0e14"/>
+<g clip-path="url(#tl)">
+<g class="a sq1">
+<text class="m mu" x="32" y="182" font-size="16">$</text>
+<text class="m a cm1" x="50" y="182" font-size="16" textLength="76.8" lengthAdjust="spacing">npm test</text>
+<rect class="a mk1" x="48" y="166" width="82.8" height="22" fill="#0a0e14"/>
+<rect class="a cr1" x="50" y="168" width="9" height="18" fill="#e6edf3"/>
+<rect class="a sx1 sx" x="48" y="176" width="78.8" height="2" fill="#f2545b"/>
+<text class="m rd a bk1" x="32" y="210" font-size="15">memory-guard: only 1.8 GB free (minimum 3 GB)</text>
+</g>
+<g class="a p3">
+<text class="m mu" x="32" y="246" font-size="16">$</text>
+<text class="m tx" x="50" y="246" font-size="16" textLength="393.6" lengthAdjust="spacing">bulkhead remote run --tail=20 -- npm test</text>
+<rect class="a mk3" x="48" y="230" width="399.6" height="22" fill="#0a0e14"/>
+<rect class="a cr3" x="50" y="232" width="9" height="18" fill="#e6edf3"/>
+</g>
+<text class="m dm a l4" x="32" y="274" font-size="15">buildbox  copy a  port 7172</text>
+<text class="m ac a l5" x="32" y="306" font-size="16">412 passed, 0 failed</text>
+<text class="m tx a l6" x="32" y="334" font-size="16">exit 0 after 1m 12s</text>
+</g>
+<text class="s mu lab" x="22" y="383">RAM</text>
+<rect x="72" y="373" width="280" height="8" rx="4" fill="#1c2531"/>
+<rect x="72" y="373" width="257" height="8" rx="4" fill="#c4ccd6"/>
+<line x1="326" y1="366" x2="326" y2="388" stroke="#f2545b" stroke-width="2"/>
+<text class="m rd" x="458" y="383" font-size="16" text-anchor="end">1.8 GB free</text>
+</g>
+
+<!-- ssh -->
+<text class="s dm lab" x="600" y="208" text-anchor="middle">SSH</text>
+<line class="a ln" x1="532" y1="230" x2="668" y2="230" stroke="#2a3646" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M660 224 L668 230 L660 236" fill="none" stroke="#2a3646" stroke-width="2"/>
+<line class="a ln" x1="532" y1="262" x2="668" y2="262" stroke="#2a3646" stroke-width="2" stroke-dasharray="4 5"/>
+<path d="M540 256 L532 262 L540 268" fill="none" stroke="#2a3646" stroke-width="2"/>
+<g class="a po">
+<rect x="536" y="219" width="64" height="22" rx="11" fill="#0d1117" stroke="#34d6b4"/>
+<text class="m ac" x="568" y="235" font-size="13" text-anchor="middle">24 KB</text>
+</g>
+<g class="a pb">
+<rect x="600" y="251" width="64" height="22" rx="11" fill="#0d1117" stroke="#34d6b4"/>
+<text class="m ac" x="632" y="267" font-size="13" text-anchor="middle">20 lines</text>
+</g>
+
+<!-- buildbox -->
+<g transform="translate(680 0)">
+<rect class="a hr" x="0" y="84" width="480" height="324" rx="14" fill="#131a23" stroke="#2a3646"/>
+<text class="m tx" x="22" y="116" font-size="19" font-weight="700">buildbox</text>
+<text class="m dm" x="22" y="138" font-size="14">dev@192.168.1.20</text>
+<text class="s dm" x="306" y="116" font-size="14" text-anchor="end">copies</text>
+<rect class="a ca" x="318" y="98" width="28" height="26" rx="6" fill="#34d6b4" fill-opacity="0" stroke="#34d6b4" stroke-opacity=".35"/>
+<text class="m a ct" x="332" y="116" font-size="14" text-anchor="middle" fill="#5d6877">a</text>
+<rect x="354" y="98" width="28" height="26" rx="6" fill="#34d6b4" fill-opacity="0" stroke="#34d6b4" stroke-opacity=".35"/>
+<text class="m" x="368" y="116" font-size="14" text-anchor="middle" fill="#5d6877">b</text>
+<rect x="390" y="98" width="28" height="26" rx="6" fill="#34d6b4" fill-opacity="0" stroke="#34d6b4" stroke-opacity=".35"/>
+<text class="m" x="404" y="116" font-size="14" text-anchor="middle" fill="#5d6877">c</text>
+<rect x="426" y="98" width="28" height="26" rx="6" fill="#34d6b4" fill-opacity="0" stroke="#34d6b4" stroke-opacity=".35"/>
+<text class="m" x="440" y="116" font-size="14" text-anchor="middle" fill="#5d6877">d</text>
+<rect x="16" y="152" width="448" height="196" rx="8" fill="#0a0e14"/>
+<text class="m mu a r1" x="32" y="182" font-size="15">3f2a1c9 already there, 3 changed files</text>
+<text class="m tx a r2" x="32" y="210" font-size="15">copy a  BULKHEAD_PORT=7172</text>
+<g class="a r3">
+<text class="m mu" x="32" y="246" font-size="16">$</text>
+<text class="m tx" x="50" y="246" font-size="16">npm test</text>
+<rect x="32" y="262" width="416" height="6" rx="3" fill="#1c2531"/>
+<rect class="a pg" x="32" y="262" width="416" height="6" rx="3" fill="#34d6b4"/>
+</g>
+<text class="m ac a r4" x="32" y="300" font-size="16">412 passed, 0 failed</text>
+<text class="m dm a r5" x="32" y="334" font-size="15">port 7172 freed, copy a released</text>
+<text class="s mu lab" x="22" y="383">RAM</text>
+<rect x="72" y="373" width="280" height="8" rx="4" fill="#1c2531"/>
+<rect x="72" y="373" width="53" height="8" rx="4" fill="#c4ccd6"/>
+<rect class="a jr" x="121" y="373" width="35" height="8" rx="4" fill="#34d6b4"/>
+<text class="m mu a f0" x="458" y="383" font-size="16" text-anchor="end">26 GB free</text>
+<text class="m tx a f1" x="458" y="383" font-size="16" text-anchor="end">22 GB free</text>
+</g>
+</svg>
