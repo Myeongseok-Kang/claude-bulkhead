@@ -869,7 +869,7 @@ mysql -u root -e "show databases"
 redis-cli ping
 mongosh --eval "db.stats()"
 ffprobe -v error -show_format clip.mp4
-convert logo.png -resize 64x64 icon.png
+convert logo.png -resize 64x64 favicon.png
 openssl rand -hex 32
 base64 -d token.txt
 shasum -a 256 dist.tar.gz
