@@ -1,7 +1,9 @@
 name: test
 
 on:
+  # Branch pushes are tested through their pull request, so a PR runs the matrix once, not twice.
   push:
+    branches: [main]
   pull_request:
 
 jobs:
