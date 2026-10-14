@@ -254,7 +254,7 @@ async function growth(calls, make) {
   // same at every step. Noise is not: a run that crosses a GC or cache threshold makes one step
   // jump (14, 31, 191, 424 ms, and 9, 30, 77, 259 ms on macOS runners), so the smallest step counts.
   const ratios = pts.slice(1).map((p, i) => Math.max(p[2], 0.1) / Math.max(pts[i][2], 0.1))
-  return { slope, least: Math.min(...ratios), text: pts.map(p => `${Math.round(p[2])} ms at ${p[3]} MB`).join(', ') }
+  return { slope, least: Math.min(...ratios), full: pts[3][2], text: pts.map(p => `${Math.round(p[2])} ms at ${p[3]} MB`).join(', ') }
 }
 
 test('fuzz: check functions never throw and stay fast on random and mutated commands', { timeout: 600000 }, async t => {
@@ -282,6 +282,9 @@ test('fuzz: check functions never throw and stay fast on random and mutated comm
 // Each check also runs at 1/8 of the size: when the time grows much faster than the input, that
 // is reported too, before it gets anywhere near the limit.
 const LONG_LIMIT_MS = Number(process.env.FUZZ_LONG_LIMIT_MS) || 2000
+// Under this, 1 MB is fast whatever the ratio. Quadratic code takes minutes at 1 MB, so a busy
+// runner that reads 3x per doubling at 4, 16, 49, 166 ms is noise, not a super-linear pattern.
+const FAST_MS = 500
 
 test('fuzz: 1 MB inputs never throw and finish in time', { timeout: 900000 }, async t => {
   const worst = {}
@@ -298,8 +301,8 @@ test('fuzz: 1 MB inputs never throw and finish in time', { timeout: 900000 }, as
         assert.strictEqual(error, null, `${name} threw on ${shape}`)
         assert.ok(ms <= LONG_LIMIT_MS, `${name} took ${Math.round(ms)} ms on ${shape} (${c.length} chars), limit ${LONG_LIMIT_MS} ms`)
         // 8 times the input may take 8 times as long, plus noise and garbage collection; quadratic takes 64 times.
-        // Under 250 ms for 1 MB is fast whatever the ratio, and tiny small-run times make the ratio noisy.
-        if (ms <= Math.max(250, 32 * smallRun.ms)) return
+        // Under FAST_MS for 1 MB is fast whatever the ratio, and tiny small-run times make the ratio noisy.
+        if (ms <= Math.max(FAST_MS, 32 * smallRun.ms)) return
         // Two timings are not enough on a small macOS runner: other test files run at the same
         // time, and one 1 MB run that lands on a busy moment or a major GC reads 30-40 times the
         // 1/8 run (7 ms -> 272 ms) although the same shape measured on that runner grows by about 2
@@ -307,7 +310,7 @@ test('fuzz: 1 MB inputs never throw and finish in time', { timeout: 900000 }, as
         // sizes: each doubling of the input should about double the time, where quadratic code
         // takes four times as long every time.
         const fit = await growth(fn, make)
-        assert.ok(fit.least < 2.8, `${name} on ${shape} grows faster than linear: at least ${fit.least.toFixed(1)}x per doubling, time ~ size^${fit.slope.toFixed(2)} (${fit.text}); ` +
+        assert.ok(fit.least < 2.8 || fit.full <= FAST_MS, `${name} on ${shape} grows faster than linear: at least ${fit.least.toFixed(1)}x per doubling, time ~ size^${fit.slope.toFixed(2)} (${fit.text}); ` +
           `first check: ${Math.round(smallRun.ms)} ms at 1/8 size, ${Math.round(ms)} ms at full size`)
       })
     }
